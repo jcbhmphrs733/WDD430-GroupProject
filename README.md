@@ -24,7 +24,7 @@ Vercel
 
 Pages
 
-Home
+## Home
 
 seller page
 
@@ -40,7 +40,7 @@ specific search page
 
 user profile page shows their ratings/reviews, history
 
-Color Schema 
+## Color Schema 
 
 E63946
 
@@ -52,7 +52,7 @@ F1FAEE
 
 1D3557
 
-Font
+## Font
 
 Telex
 
