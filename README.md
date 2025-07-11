@@ -8,8 +8,11 @@ All data is stored in a database
 
 # Group Members
 Hayden Call
+
 Adam Humes
+
 Jacob Humphries
+
 Ivan Lopez
 
 # Technologies
