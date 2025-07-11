@@ -25,9 +25,9 @@ Vercel
 
 # Design
 
-Pages
+## Pages
 
-## Home
+Home
 
 seller page
 
