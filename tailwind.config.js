@@ -8,59 +8,42 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Your custom color palette
-        primary: {
-          50: '#fef2f2',
-          100: '#fee2e2',
-          200: '#fecaca',
-          300: '#fca5a5',
-          400: '#f87171',
-          500: '#e63946', // Main red
-          600: '#dc2626',
-          700: '#b91c1c',
-          800: '#991b1b',
-          900: '#7f1d1d',
+        // Primary color system (100-500 range for consistency)
+        background: {
+          100: '#fefcf3',        // Very light cream
+          200: '#fdf9e7',        // Light cream
+          300: '#fbf5db',        // Medium light cream
+          400: '#faf7e8',        // Main cream yellow (background)
+          500: '#f7f2d4',        // Darker cream
         },
-        cream: '#f1faee', // Light cream
+        text: {
+          100: '#94a3b8',        // Light blue-gray
+          200: '#64748b',        // Medium light blue-gray
+          300: '#475569',        // Medium blue-gray
+          400: '#334155',        // Dark blue-gray
+          500: '#1d3557',        // Main dark blue (primary text)
+        },
+        warning: {
+          100: '#fee2e2',        // Light red
+          200: '#fecaca',        // Medium light red
+          300: '#fca5a5',        // Medium red
+          400: '#f87171',        // Medium dark red
+          500: '#e63946',        // Main red (warning)
+        },
         success: {
-          50: '#f0fdf4',
-          100: '#dcfce7',
-          200: '#bbf7d0',
-          300: '#86efac',
-          400: '#4ade80',
-          500: '#3bb273', // Main green
-          600: '#16a34a',
-          700: '#15803d',
-          800: '#166534',
-          900: '#14532d',
+          100: '#dcfce7',        // Light green
+          200: '#bbf7d0',        // Medium light green
+          300: '#86efac',        // Medium green
+          400: '#4ade80',        // Medium dark green
+          500: '#3bb273',        // Main green (success)
         },
         info: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#457b9d', // Main blue
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
+          100: '#e0f2fe',        // Light blue
+          200: '#bae6fd',        // Medium light blue
+          300: '#7dd3fc',        // Medium blue
+          400: '#38bdf8',        // Medium dark blue
+          500: '#457b9d',        // Main blue (info)
         },
-        dark: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#1d3557', // Main dark blue
-        },
-        // Keep existing colors for compatibility
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
       },
       fontFamily: {
         sans: ['var(--font-telex)', 'Arial', 'sans-serif'],

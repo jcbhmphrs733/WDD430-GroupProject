@@ -5,17 +5,17 @@ import { Button } from '@/components/ui/Button';
 
 export function Header() {
   return (
-    <header className="bg-cream dark:bg-dark-900 shadow-sm border-b border-dark-200 dark:border-dark-700">
+    <header className="bg-background-200 border-t border-background-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <Image
-                src="/logo.png"
+                src="/logo-small.png"
                 alt="Handcrafted Haven"
-                width={120}
-                height={32}
+                width={90}
+                height={90}
                 className="dark:invert"
               />
             </Link>
@@ -25,19 +25,19 @@ export function Header() {
           <nav className="hidden md:flex space-x-8">
             <Link 
               href="/explore" 
-              className="text-dark-700 dark:text-cream hover:text-primary-500 dark:hover:text-primary-400 transition-colors font-medium"
+              className="text-text-400 hover:text-text-500 transition-colors font-medium"
             >
               Explore
             </Link>
             <Link 
               href="/categories" 
-              className="text-dark-700 dark:text-cream hover:text-primary-500 dark:hover:text-primary-400 transition-colors font-medium"
+              className="text-text-400 hover:text-text-500 transition-colors font-medium"
             >
               Categories
             </Link>
             <Link 
               href="/create" 
-              className="text-dark-700 dark:text-cream hover:text-primary-500 dark:hover:text-primary-400 transition-colors font-medium"
+              className="text-text-400 hover:text-text-500 transition-colors font-medium"
             >
               Create
             </Link>
@@ -48,7 +48,7 @@ export function Header() {
             <Button variant="outline" size="sm">
               Login
             </Button>
-            <Button variant="primary" size="sm">
+            <Button variant="outline" size="sm">
               Sign Up
             </Button>
           </div>

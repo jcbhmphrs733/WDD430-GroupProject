@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  /* Light theme */
-  --background: #f1faee;        /* cream */
+  /* Light theme - Default */
+  --background: #faf7e8;        /* cream yellow */
   --foreground: #1d3557;        /* dark blue */
   --primary: #e63946;           /* red */
   --secondary: #457b9d;         /* blue */
@@ -16,19 +16,12 @@
 }
 
 .dark {
-  /* Dark theme */
+  /* Dark theme - Only when explicitly toggled */
   --background: #1d3557;        /* dark blue */
-  --foreground: #f1faee;        /* cream */
+  --foreground: #faf7e8;        /* cream yellow */
   --primary: #e63946;           /* red */
   --secondary: #457b9d;         /* blue */
   --accent: #3bb273;            /* green */
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1d3557;
-    --foreground: #f1faee;
-  }
 }
 
 body {
@@ -38,58 +31,9 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Custom utility classes for your color palette */
-@layer utilities {
-  .text-brand-primary {
-    color: #e63946;
-  }
-  
-  .text-brand-cream {
-    color: #f1faee;
-  }
-  
-  .text-brand-success {
-    color: #3bb273;
-  }
-  
-  .text-brand-info {
-    color: #457b9d;
-  }
-  
-  .text-brand-dark {
-    color: #1d3557;
-  }
-  
-  .bg-brand-primary {
-    background-color: #e63946;
-  }
-  
-  .bg-brand-cream {
-    background-color: #f1faee;
-  }
-  
-  .bg-brand-success {
-    background-color: #3bb273;
-  }
-  
-  .bg-brand-info {
-    background-color: #457b9d;
-  }
-  
-  .bg-brand-dark {
-    background-color: #1d3557;
-  }
-  
-  /* Typography utilities */
-  .font-telex {
-    font-family: var(--font-telex), Arial, sans-serif;
-  }
-  
-  .font-mono {
-    font-family: var(--font-geist-mono), Consolas, monospace;
-  }
-  
-  /* Text effects for headings with Telex font */
+/* Custom component styles that Tailwind can't handle */
+@layer components {
+  /* Typography components for consistent heading styles */
   .heading-primary {
     font-family: var(--font-telex), Arial, sans-serif;
     font-weight: 400;
