@@ -2,6 +2,7 @@
 // Create this file: src/app/test-db/page.tsx
 
 import { testConnection, getAllArtpieces, getAllCategories, checkDatabaseStructure } from '@/lib/database';
+import { ArtpieceWithDetails, Category, DatabaseStructure } from '@/types';
 
 export default async function TestDatabase() {
   try {
@@ -9,9 +10,9 @@ export default async function TestDatabase() {
     const connectionTest = await testConnection();
     
     // Check database structure
-    const dbStructure = await checkDatabaseStructure();
+    const dbStructure: DatabaseStructure = await checkDatabaseStructure();
     
-    let artpieces: unknown[] = [];
+    let artpieces: ArtpieceWithDetails[] = [];
     let artpiecesError: string | null = null;
     
     // Try to get artpieces, but catch the error if view doesn't exist
@@ -22,7 +23,7 @@ export default async function TestDatabase() {
     }
     
     // Test categories (should work since it's a simple table)
-    const categories = await getAllCategories();
+    const categories: Category[] = await getAllCategories();
     
     return (
       <div className="p-8">
@@ -37,10 +38,10 @@ export default async function TestDatabase() {
           <h2 className="text-lg font-semibold">Database Structure:</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <h3 className="font-medium mb-2">Tables ({dbStructure.tables.filter(t => (t as any).table_type === 'BASE TABLE').length}):</h3>
+              <h3 className="font-medium mb-2">Tables ({dbStructure.tables.filter(t => t.table_type === 'BASE TABLE').length}):</h3>
               <ul className="list-disc list-inside text-sm">
-                {dbStructure.tables.filter(t => (t as any).table_type === 'BASE TABLE').map(table => (
-                  <li key={(table as any).table_name} className="text-green-600">✅ {(table as any).table_name}</li>
+                {dbStructure.tables.filter(t => t.table_type === 'BASE TABLE').map(table => (
+                  <li key={table.table_name} className="text-green-600">✅ {table.table_name}</li>
                 ))}
               </ul>
             </div>
@@ -48,7 +49,7 @@ export default async function TestDatabase() {
               <h3 className="font-medium mb-2">Views ({dbStructure.views.length}):</h3>
               <ul className="list-disc list-inside text-sm">
                 {dbStructure.views.map(view => (
-                  <li key={(view as any).view_name} className="text-green-600">✅ {(view as any).view_name}</li>
+                  <li key={view.view_name} className="text-green-600">✅ {view.view_name}</li>
                 ))}
               </ul>
             </div>
@@ -59,7 +60,7 @@ export default async function TestDatabase() {
           <h2 className="text-lg font-semibold">Categories ({categories.length}):</h2>
           <ul className="list-disc list-inside">
             {categories.map(cat => (
-              <li key={(cat as any).id}>{(cat as any).name}</li>
+              <li key={cat.id}>{cat.name}</li>
             ))}
           </ul>
         </div>
@@ -75,11 +76,11 @@ export default async function TestDatabase() {
               <p className="mb-2">Found {artpieces.length} artpieces</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {artpieces.slice(0, 4).map(art => (
-                  <div key={(art as any).id} className="border p-4 rounded">
-                    <h3 className="font-semibold">{(art as any).title}</h3>
-                    <p className="text-sm text-gray-600">by {(art as any).creator_name || (art as any).creator_username}</p>
-                    <p className="text-lg font-bold">${(art as any).price}</p>
-                    <p className="text-sm">⭐ {(art as any).average_rating} ({(art as any).review_count} reviews)</p>
+                  <div key={art.id} className="border p-4 rounded">
+                    <h3 className="font-semibold">{art.title}</h3>
+                    <p className="text-sm text-gray-600">by {art.creator_name || art.creator_username}</p>
+                    <p className="text-lg font-bold">${art.price}</p>
+                    <p className="text-sm">⭐ {art.average_rating} ({art.review_count} reviews)</p>
                   </div>
                 ))}
               </div>

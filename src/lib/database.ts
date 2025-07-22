@@ -1,17 +1,18 @@
 // Database configuration and utility functions for Handcrafted Haven
 import { sql } from '@vercel/postgres';
+import { User, Category, ArtpieceWithDetails, DatabaseStructure } from '@/types';
 
 export { sql };
 
 // User-related database functions
-export async function getAllUsers() {
+export async function getAllUsers(): Promise<User[]> {
   try {
     const result = await sql`
       SELECT id, username, first_name, last_name, email, bio, profile_image_url, created_at 
       FROM users 
       ORDER BY created_at DESC
     `;
-    return result.rows;
+    return result.rows as User[];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch users.');
@@ -33,13 +34,13 @@ export async function getUserById(userId: string) {
 }
 
 // Artpiece-related database functions
-export async function getAllArtpieces() {
+export async function getAllArtpieces(): Promise<ArtpieceWithDetails[]> {
   try {
     const result = await sql`
       SELECT * FROM artpieces_with_details 
       ORDER BY created_at DESC
     `;
-    return result.rows;
+    return result.rows as ArtpieceWithDetails[];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch artpieces.');
@@ -90,13 +91,13 @@ export async function searchArtpieces(searchTerm: string) {
 }
 
 // Category-related functions
-export async function getAllCategories() {
+export async function getAllCategories(): Promise<Category[]> {
   try {
     const result = await sql`
       SELECT * FROM categories 
       ORDER BY name
     `;
-    return result.rows;
+    return result.rows as Category[];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch categories.');
@@ -148,7 +149,7 @@ export async function testConnection() {
 }
 
 // Check what tables and views exist in the database
-export async function checkDatabaseStructure() {
+export async function checkDatabaseStructure(): Promise<DatabaseStructure> {
   try {
     const tables = await sql`
       SELECT table_name, table_type 
@@ -165,8 +166,8 @@ export async function checkDatabaseStructure() {
     `;
 
     return {
-      tables: tables.rows,
-      views: views.rows
+      tables: tables.rows as { table_name: string; table_type: string }[],
+      views: views.rows as { view_name: string }[]
     };
   } catch (error) {
     console.error('Database Structure Check Error:', error);

@@ -123,3 +123,18 @@ export interface PaginatedResponse<T> {
     totalPages: number;
   };
 }
+
+// Database structure check types
+export interface DatabaseTable {
+  table_name: string;
+  table_type: string;
+}
+
+export interface DatabaseView {
+  view_name: string;
+}
+
+export interface DatabaseStructure {
+  tables: DatabaseTable[];
+  views: DatabaseView[];
+}
