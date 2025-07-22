@@ -1,20 +1,45 @@
-# WDD 430 Group Project
+# Handcrafted Haven - WDD 430 Group Project
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+A Next.js marketplace application for handcrafted items built with TypeScript, Tailwind CSS, and Vercel Postgres.
 
-## Getting Started
+## 🚀 Getting Started
 
-First, install the dependencies:
+### 1. Clone and Install Dependencies
 
 ```bash
-npm install
-# or
-yarn install
-# or
+git clone <repository-url>
+cd WDD430-GroupProject
 pnpm install
 ```
 
-Then, run the development server:
+### 2. Database Setup 
+
+**We use a shared team database for consistent development.**
+
+1. **Copy the environment template:**
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. **Schedule a setup session** with the project maintainer
+   - Contact: [Your Name] - [Your Contact Info]
+   - We'll do a 10-15 minute video call to set up your environment
+   - Have your `.env.local` file open and ready to edit
+
+3. **During the video call**, you'll receive:
+   - Database connection strings
+   - Authentication keys
+   - Any additional environment variables
+
+4. **Never commit `.env.local` to version control**
+
+### 🎥 What to Have Ready for Setup Call
+- [ ] Repository cloned and dependencies installed (`pnpm install`)
+- [ ] `.env.local` file created from `.env.example`
+- [ ] Code editor open with `.env.local` ready to edit
+- [ ] Stable internet connection for video call
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
