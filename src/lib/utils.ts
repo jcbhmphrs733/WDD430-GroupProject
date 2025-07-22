@@ -1,11 +1,12 @@
 // Utility functions for your Handcrafted Haven project
 
-export function formatDate(date: Date): string {
+export function formatDate(date: Date | string): string {
+  const dateObj = date instanceof Date ? date : new Date(date);
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  }).format(date);
+  }).format(dateObj);
 }
 
 export function truncateText(text: string, maxLength: number): string {
