@@ -17,10 +17,10 @@ export function Button({
   const baseClasses = 'rounded-lg transition-all duration-200 flex items-center justify-center font-medium focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantClasses = {
-    primary: 'bg-primary-500 text-cream hover:bg-primary-600 focus:ring-primary-500 shadow-sm hover:shadow-md',
-    secondary: 'bg-info-500 text-cream hover:bg-info-600 focus:ring-info-500 shadow-sm hover:shadow-md',
-    success: 'bg-success-500 text-cream hover:bg-success-600 focus:ring-success-500 shadow-sm hover:shadow-md',
-    outline: 'border-2 border-dark-300 dark:border-cream text-dark-700 dark:text-cream hover:bg-dark-50 dark:hover:bg-dark-800 focus:ring-dark-500'
+    primary: 'bg-text-500 text-background-100 hover:bg-text-400 focus:ring-text-500 shadow-sm hover:shadow-md',
+    secondary: 'bg-info-500 text-background-100 hover:bg-info-400 focus:ring-info-500 shadow-sm hover:shadow-md',
+    success: 'bg-success-500 text-background-100 hover:bg-success-400 focus:ring-success-500 shadow-sm hover:shadow-md',
+    outline: 'border-2 border-text-300 text-text-500 hover:bg-background-300 focus:ring-text-500 hover:border-text-400'
   };
   
   const sizeClasses = {

@@ -11,7 +11,7 @@ module.exports = {
         // Primary color system (100-500 range for consistency)
         background: {
           100: '#fefcf3',        // Very light cream
-          200: '#fdf9e7',        // Light cream
+          200: '#faf7e8',        // Light cream
           300: '#fbf5db',        // Medium light cream
           400: '#faf7e8',        // Main cream yellow (background)
           500: '#f7f2d4',        // Darker cream

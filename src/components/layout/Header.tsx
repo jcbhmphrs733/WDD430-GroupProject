@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 
 export function Header() {
   return (
-    <header className="bg-background-200 border-t border-background-300">
+    <header className="bg-background-200 border-t border-background-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
