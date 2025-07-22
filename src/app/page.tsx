@@ -13,13 +13,11 @@ export default function Home() {
           priority
         />
 
-          <h1 className="mb-2 tracking-[-.01em]">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl heading-primary text-dark-900 dark:text-cream mb-2">
             Welcome to Handcrafted Haven!
-            {/* <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-            </code> */}
           </h1>
-          <p className="tracking-[-.01em]">
-            Explore what others have crafted and share your own creations.
+          <p className="text-lg sm:text-xl text-dark-700 dark:text-cream/90 max-w-2xl text-center sm:text-left">
+            Explore what others have crafted and share your own creations with our community of passionate makers and artisans.
           </p>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">

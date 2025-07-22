@@ -3,26 +3,104 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light theme */
+  --background: #f1faee;        /* cream */
+  --foreground: #1d3557;        /* dark blue */
+  --primary: #e63946;           /* red */
+  --secondary: #457b9d;         /* blue */
+  --accent: #3bb273;            /* green */
+  
+  /* Font variables */
+  --font-sans: var(--font-telex);
+  --font-mono: var(--font-geist-mono);
 }
 
-:root {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  /* Dark theme */
+  --background: #1d3557;        /* dark blue */
+  --foreground: #f1faee;        /* cream */
+  --primary: #e63946;           /* red */
+  --secondary: #457b9d;         /* blue */
+  --accent: #3bb273;            /* green */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1d3557;
+    --foreground: #f1faee;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom utility classes for your color palette */
+@layer utilities {
+  .text-brand-primary {
+    color: #e63946;
+  }
+  
+  .text-brand-cream {
+    color: #f1faee;
+  }
+  
+  .text-brand-success {
+    color: #3bb273;
+  }
+  
+  .text-brand-info {
+    color: #457b9d;
+  }
+  
+  .text-brand-dark {
+    color: #1d3557;
+  }
+  
+  .bg-brand-primary {
+    background-color: #e63946;
+  }
+  
+  .bg-brand-cream {
+    background-color: #f1faee;
+  }
+  
+  .bg-brand-success {
+    background-color: #3bb273;
+  }
+  
+  .bg-brand-info {
+    background-color: #457b9d;
+  }
+  
+  .bg-brand-dark {
+    background-color: #1d3557;
+  }
+  
+  /* Typography utilities */
+  .font-telex {
+    font-family: var(--font-telex), Arial, sans-serif;
+  }
+  
+  .font-mono {
+    font-family: var(--font-geist-mono), Consolas, monospace;
+  }
+  
+  /* Text effects for headings with Telex font */
+  .heading-primary {
+    font-family: var(--font-telex), Arial, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+  
+  .heading-secondary {
+    font-family: var(--font-telex), Arial, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
 }
