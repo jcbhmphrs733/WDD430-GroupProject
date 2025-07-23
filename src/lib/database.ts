@@ -40,10 +40,60 @@ export async function getAllArtpieces(): Promise<ArtpieceWithDetails[]> {
       SELECT * FROM artpieces_with_details 
       ORDER BY created_at DESC
     `;
-    return result.rows as ArtpieceWithDetails[];
+    return result.rows.map(row => ({
+      ...row,
+      price: Number(row.price),
+      average_rating: Number(row.average_rating),
+      review_count: Number(row.review_count),
+      favorite_count: Number(row.favorite_count),
+      view_count: Number(row.view_count)
+    })) as ArtpieceWithDetails[];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch artpieces.');
+  }
+}
+
+export async function getRandomArtpieces(limit: number = 10): Promise<ArtpieceWithDetails[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM artpieces_with_details 
+      ORDER BY RANDOM()
+      LIMIT ${limit}
+    `;
+    return result.rows.map(row => ({
+      ...row,
+      price: Number(row.price),
+      average_rating: Number(row.average_rating),
+      review_count: Number(row.review_count),
+      favorite_count: Number(row.favorite_count),
+      view_count: Number(row.view_count)
+    })) as ArtpieceWithDetails[];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch random artpieces.');
+  }
+}
+
+export async function getFeaturedArtpieces(limit: number = 8): Promise<ArtpieceWithDetails[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM artpieces_with_details 
+      WHERE average_rating >= 4 OR favorite_count >= 2
+      ORDER BY (average_rating * 0.7 + favorite_count * 0.3) DESC, created_at DESC
+      LIMIT ${limit}
+    `;
+    return result.rows.map(row => ({
+      ...row,
+      price: Number(row.price),
+      average_rating: Number(row.average_rating),
+      review_count: Number(row.review_count),
+      favorite_count: Number(row.favorite_count),
+      view_count: Number(row.view_count)
+    })) as ArtpieceWithDetails[];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch featured artpieces.');
   }
 }
 

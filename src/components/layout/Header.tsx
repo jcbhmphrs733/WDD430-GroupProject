@@ -24,6 +24,12 @@ export function Header() {
           {/* Navigation */}
           <nav className="hidden md:flex space-x-8">
             <Link 
+              href="/discover" 
+              className="text-text-400 hover:text-text-500 transition-colors font-medium"
+            >
+              Discover
+            </Link>
+            <Link 
               href="/explore" 
               className="text-text-400 hover:text-text-500 transition-colors font-medium"
             >

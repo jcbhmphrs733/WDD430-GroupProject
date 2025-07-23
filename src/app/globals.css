@@ -12,7 +12,7 @@
   
   /* Font variables */
   --font-sans: var(--font-telex);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-telex);
 }
 
 .dark {

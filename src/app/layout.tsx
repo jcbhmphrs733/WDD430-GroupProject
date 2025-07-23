@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Telex, Geist_Mono } from "next/font/google";
+import { Telex } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
@@ -7,12 +7,6 @@ import "./globals.css";
 const telex = Telex({
   weight: '400',
   variable: "--font-telex",
-  subsets: ["latin"],
-  display: 'swap',
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
   display: 'swap',
 });
@@ -31,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${telex.variable} ${geistMono.variable} font-sans antialiased min-h-screen flex flex-col`}
+        className={`${telex.variable} font-sans antialiased min-h-screen flex flex-col bg-background-200`}
       >
         <Header />
         <main className="flex-1">

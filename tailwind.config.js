@@ -13,7 +13,7 @@ module.exports = {
           100: '#fefcf3',        // Very light cream
           200: '#faf7e8',        // Light cream
           300: '#fbf5db',        // Medium light cream
-          400: '#faf7e8',        // Main cream yellow (background)
+          400: '#fff5c5ff',        // Main cream yellow (background)
           500: '#f7f2d4',        // Darker cream
         },
         text: {
@@ -47,7 +47,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-telex)', 'Arial', 'sans-serif'],
-        mono: ['var(--font-geist-mono)', 'Consolas', 'monospace'],
+        mono: ['var(--font-telex)', 'Arial', 'sans-serif'],
       },
     },
   },
