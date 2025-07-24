@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light theme - Default */
+  --background: #faf7e8;        /* cream yellow */
+  --foreground: #1d3557;        /* dark blue */
+  --primary: #e63946;           /* red */
+  --secondary: #457b9d;         /* blue */
+  --accent: #3bb273;            /* green */
+  
+  /* Font variables */
+  --font-sans: var(--font-telex);
+  --font-mono: var(--font-telex);
+}
+
+.dark {
+  /* Dark theme - Only when explicitly toggled */
+  --background: #1d3557;        /* dark blue */
+  --foreground: #faf7e8;        /* cream yellow */
+  --primary: #e63946;           /* red */
+  --secondary: #457b9d;         /* blue */
+  --accent: #3bb273;            /* green */
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom component styles that Tailwind can't handle */
+@layer components {
+  /* Typography components for consistent heading styles */
+  .heading-primary {
+    font-family: var(--font-telex), Arial, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+  
+  .heading-secondary {
+    font-family: var(--font-telex), Arial, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+}
