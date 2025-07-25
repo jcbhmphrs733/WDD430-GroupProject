@@ -11,6 +11,9 @@ export default async function DiscoverPage() {
       getAllCategories()
     ]);
 
+    // Shuffle the artpieces array for random order on each page load
+    const shuffledArtpieces = [...allArtpieces].sort(() => Math.random() - 0.5);
+
     return (
       <div className="min-h-screen">
         <div className="container mx-auto px-4 py-8">
@@ -29,7 +32,7 @@ export default async function DiscoverPage() {
           {/* Discover Something New Carousel */}
           <section className="mb-16">
             <ArtpieceCarousel 
-              artpieces={allArtpieces}
+              artpieces={shuffledArtpieces}
               title="Discover Something New"
               className="mb-8"
             />
