@@ -88,7 +88,7 @@ export function ArtpieceCarousel({ artpieces, title = "Featured Artpieces", clas
     return (
       <div className={`relative ${className}`}>
         {/* Title */}
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">{title}</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 px-2 sm:px-0">{title}</h2>
 
         {/* Carousel Container with External Navigation */}
         <div className="flex items-center">
