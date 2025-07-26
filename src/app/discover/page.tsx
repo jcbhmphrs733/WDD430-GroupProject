@@ -47,7 +47,7 @@ export default async function DiscoverPage() {
                   <Link
                     key={category.id}
                     href={`/categories/${category.name.toLowerCase()}`}
-                    className="bg-background-200 hover:bg-background-300 rounded-lg p-3 sm:p-4 text-center hover:shadow-lg transition-all duration-200 border border-background-300 border-gray-900"
+                    className="bg-background-200 hover:bg-background-300 rounded-lg p-3 sm:p-4 text-center hover:shadow-lg transition-all duration-200 border  border-gray-900"
                   >
                     <h3 className="font-medium text-gray-900 text-xs sm:text-sm">
                       {category.name}
