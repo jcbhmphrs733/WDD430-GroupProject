@@ -15,13 +15,16 @@ module.exports = {
           300: '#fbf5db',        // Medium light cream
           400: '#fff5c5ff',        // Main cream yellow (background)
           500: '#f7f2d4',        // Darker cream
+          600: '#1d3557',       // Dark Blue
         },
-        text: {
-          100: '#94a3b8',        // Light blue-gray
+        text: {          
+          100: '#94a3b8',        // Light blue-gray          
           200: '#64748b',        // Medium light blue-gray
           300: '#475569',        // Medium blue-gray
           400: '#334155',        // Dark blue-gray
           500: '#1d3557',        // Main dark blue (primary text)
+          600: '#faf7e8',        // cream yellow
+          700: '#FFF979',        // light yellow
         },
         warning: {
           100: '#fee2e2',        // Light red
