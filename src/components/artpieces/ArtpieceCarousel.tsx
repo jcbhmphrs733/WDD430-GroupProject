@@ -12,18 +12,20 @@ interface ArtpieceCarouselProps {
 
 export function ArtpieceCarousel({ artpieces, title = "Featured Artpieces", className = "" }: ArtpieceCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [cardsToShow, setCardsToShow] = useState(3);
+  const [cardsToShow, setCardsToShow] = useState(5);
   const [isTransitioning, setIsTransitioning] = useState(true);
 
   // Responsive cards per view
   useEffect(() => {
     const updateCardsToShow = () => {
       if (window.innerWidth < 640) {
-        setCardsToShow(1);
-      } else if (window.innerWidth < 1024) {
         setCardsToShow(2);
-      } else {
+      } else if (window.innerWidth < 768) {
         setCardsToShow(3);
+      } else if (window.innerWidth < 1024) {
+        setCardsToShow(4);
+      } else {
+        setCardsToShow(5);
       }
     };
 

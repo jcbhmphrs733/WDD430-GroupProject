@@ -1,8 +1,8 @@
 // Test your database connection
 // Create this file: src/app/test-db/page.tsx
 
-import { testConnection, getAllArtpieces, getAllCategories, checkDatabaseStructure } from '@/lib/database';
-import { ArtpieceWithDetails, Category, DatabaseStructure } from '@/types';
+import { testConnection, getAllArtpieces, getAllCategories, checkDatabaseStructure, getAllUsers } from '@/lib/database';
+import { ArtpieceWithDetails, Category, DatabaseStructure, User } from '@/types';
 
 export default async function TestDatabase() {
   try {
@@ -24,6 +24,8 @@ export default async function TestDatabase() {
     
     // Test categories (should work since it's a simple table)
     const categories: Category[] = await getAllCategories();
+
+    const users: User[] = await getAllUsers();
     
     return (
       <div className="p-8">
@@ -57,10 +59,10 @@ export default async function TestDatabase() {
         </div>
         
         <div className="mb-6">
-          <h2 className="text-lg font-semibold">Categories ({categories.length}):</h2>
+          <h2 className="text-lg font-semibold">Users ({users.length}):</h2>
           <ul className="list-disc list-inside">
-            {categories.map(cat => (
-              <li key={cat.id}>{cat.name}</li>
+            {users.map(user => (
+              <li key={user.id}>{user.first_name}, {user.last_name} | {user.id}</li>
             ))}
           </ul>
         </div>
@@ -74,16 +76,6 @@ export default async function TestDatabase() {
           ) : (
             <div>
               <p className="mb-2">Found {artpieces.length} artpieces</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {artpieces.slice(0, 4).map(art => (
-                  <div key={art.id} className="border p-4 rounded">
-                    <h3 className="font-semibold">{art.title}</h3>
-                    <p className="text-sm text-gray-600">by {art.creator_name || art.creator_username}</p>
-                    <p className="text-lg font-bold">${art.price}</p>
-                    <p className="text-sm">⭐ {art.average_rating} ({art.review_count} reviews)</p>
-                  </div>
-                ))}
-              </div>
             </div>
           )}
         </div>
