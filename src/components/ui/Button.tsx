@@ -20,7 +20,8 @@ export function Button({
     primary: 'bg-text-500 text-background-100 hover:bg-text-400 focus:ring-text-500 shadow-sm hover:shadow-md',
     secondary: 'bg-info-500 text-background-100 hover:bg-info-400 focus:ring-info-500 shadow-sm hover:shadow-md',
     success: 'bg-success-500 text-background-100 hover:bg-success-400 focus:ring-success-500 shadow-sm hover:shadow-md',
-    outline: 'border-2 border-text-300 text-text-500 hover:bg-background-300 focus:ring-text-500 hover:border-text-400'
+    outline: 'border-2 border-text-300 text-text-500 hover:bg-background-300 focus:ring-text-500 hover:border-text-400',
+    header: ''
   };
   
   const sizeClasses = {

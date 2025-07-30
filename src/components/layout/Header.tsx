@@ -5,14 +5,14 @@ import { Button } from '@/components/ui/Button';
 
 export function Header() {
   return (
-    <header className="bg-background-200 border-t border-background-200">
+    <header className="bg-background-600 border-t border-background-600 p-3">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
               <Image
-                src="/logo-small.png"
+                src="/logo-small-inverted.png"
                 alt="Handcrafted Haven"
                 width={90}
                 height={90}
@@ -25,25 +25,25 @@ export function Header() {
           <nav className="hidden md:flex space-x-8">
             <Link 
               href="/discover" 
-              className="text-text-400 hover:text-text-500 transition-colors font-medium"
+              className="text-text-600 hover:text-text-700 transition-colors font-medium"
             >
               Discover
             </Link>
             <Link 
               href="/explore" 
-              className="text-text-400 hover:text-text-500 transition-colors font-medium"
+              className="text-text-600 hover:text-text-700 transition-colors font-medium"
             >
               Explore
             </Link>
             <Link 
               href="/categories" 
-              className="text-text-400 hover:text-text-500 transition-colors font-medium"
+              className="text-text-600 hover:text-text-700 transition-colors font-medium"
             >
               Categories
             </Link>
             <Link 
               href="/create" 
-              className="text-text-400 hover:text-text-500 transition-colors font-medium"
+              className="text-text-600 hover:text-text-700 transition-colors font-medium"
             >
               Create
             </Link>
@@ -51,10 +51,10 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
-            <Button variant="outline" size="sm">
+            <Button variant="secondary" size="sm">
               Login
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="secondary" size="sm">
               Sign Up
             </Button>
           </div>

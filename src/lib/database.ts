@@ -192,6 +192,28 @@ export async function searchArtpieces(searchTerm: string) {
   }
 }
 
+export async function getArtpiecesbyUser(userId: string): Promise<ArtpieceWithDetails[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM artpieces_with_details
+      WHERE user_id = ${userId}
+      ORDER BY created_at desc
+    `;
+      
+    return result.rows.map(row => ({
+      ...row,
+      price: Number(row.price),
+      average_rating: Number(row.average_rating),
+      review_count: Number(row.review_count),
+      favorite_count: Number(row.favorite_count),
+      view_count: Number(row.view_count),
+    })) as ArtpieceWithDetails[];    
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch artpieces for user.');
+  }
+}
+
 // Category-related functions
 export async function getAllCategories(): Promise<Category[]> {
   try {
