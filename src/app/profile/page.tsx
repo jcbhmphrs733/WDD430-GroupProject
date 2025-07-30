@@ -8,7 +8,7 @@ export default async function ProfilePage(props: {params: Promise<{id: string}>}
         const params = await props.params;
         const id = params.id;      
 
-        const [userArtpieces, categories] = await Promise.all([
+        const [userArtpieces] = await Promise.all([
             getAllArtpieces()
             // getUserById(id),
             // getArtpiecesbyUser(id)
