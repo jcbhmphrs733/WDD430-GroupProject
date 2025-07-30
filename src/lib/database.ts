@@ -1,6 +1,6 @@
 // Database configuration and utility functions for Handcrafted Haven
 import { sql } from '@vercel/postgres';
-import { User, Category, ArtpieceWithDetails, DatabaseStructure } from '@/types';
+import { User, Category, ArtpieceWithDetails, DatabaseStructure, Review } from '@/types';
 
 export { sql };
 
@@ -111,16 +111,68 @@ export async function getArtpiecesByCategory(categoryName: string) {
   }
 }
 
-export async function getArtpieceById(artpieceId: string) {
+export async function getArtpieceById(artpieceId: string): Promise<ArtpieceWithDetails | null> {
   try {
     const result = await sql`
       SELECT * FROM artpieces_with_details 
       WHERE id = ${artpieceId}
     `;
-    return result.rows[0] || null;
+    if (result.rows.length > 0) {
+      const row = result.rows[0];
+      return {
+        ...row,
+        price: Number(row.price),
+        average_rating: Number(row.average_rating),
+        review_count: Number(row.review_count),
+        favorite_count: Number(row.favorite_count),
+        view_count: Number(row.view_count),
+        category_id: Number(row.category_id)
+      } as ArtpieceWithDetails;
+    }
+    return null;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch artpiece.');
+  }
+}
+
+export async function getArtpieceReviews(artpieceId: string): Promise<Review[]> {
+  try {
+    const result = await sql`
+      SELECT 
+        r.id,
+        r.artpiece_id,
+        r.reviewer_id,
+        r.rating,
+        r.comment,
+        r.created_at,
+        r.updated_at,
+        u.username,
+        u.first_name,
+        u.last_name,
+        u.profile_image_url
+      FROM reviews r
+      LEFT JOIN users u ON r.reviewer_id = u.id
+      WHERE r.artpiece_id = ${artpieceId}
+      ORDER BY r.created_at DESC
+    `;
+    return result.rows as Review[];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch artpiece reviews.');
+  }
+}
+
+export async function incrementArtpieceViews(artpieceId: string): Promise<void> {
+  try {
+    await sql`
+      UPDATE artpieces 
+      SET view_count = view_count + 1 
+      WHERE id = ${artpieceId}
+    `;
+  } catch (error) {
+    console.error('Database Error:', error);
+    // Don't throw error for view count increment failures
   }
 }
 

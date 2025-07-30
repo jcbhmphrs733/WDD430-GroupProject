@@ -43,18 +43,6 @@ export interface ArtpieceWithDetails extends Artpiece {
   favorite_count: number;
 }
 
-// Type for craft components that expect different property names
-export interface Craft {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  userId: string;
-  createdAt: string;
-  price?: number;
-  category?: string;
-}
-
 export interface Review {
   id: string;
   artpiece_id: string;
