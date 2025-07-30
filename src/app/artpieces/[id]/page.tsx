@@ -26,8 +26,7 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
 
     return (
       <div className="min-h-screen bg-background-100">
-        <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8">
-          
+        <div className="max-w-3xl mx-auto px-4 py-6 sm:py-8">
           {/* Breadcrumb Navigation */}
           <nav className="mb-6 text-sm">
             <Link href="/" className="text-gray-500 hover:text-gray-700">
@@ -42,7 +41,6 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            
             {/* Hero Image Section */}
             <div className="order-1">
               <div className="relative aspect-square rounded-lg overflow-hidden shadow-lg border border-background-300">
@@ -59,7 +57,6 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
 
             {/* Details Section */}
             <div className="order-2 space-y-6">
-              
               {/* Title and Creator */}
               <div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
@@ -99,7 +96,6 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                     {artpiece.category_name}
                   </span>
                 </div>
-                
                 {/* Rating Display */}
                 {artpiece.review_count > 0 && (
                   <div className="flex items-center space-x-2">

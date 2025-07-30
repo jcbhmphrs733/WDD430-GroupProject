@@ -38,8 +38,7 @@ export function ReviewSection({ artpieceId, reviews, artpieceTitle }: ReviewSect
   };
 
   return (
-    <div className="space-y-6">
-      
+    <div className="max-w-2xl mx-auto px-4 space-y-6">
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
@@ -59,7 +58,6 @@ export function ReviewSection({ artpieceId, reviews, artpieceTitle }: ReviewSect
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Write a Review for "{artpieceTitle}"
           </h3>
-          
           <form onSubmit={handleSubmitReview} className="space-y-4">
             {/* Rating Selection */}
             <div>
@@ -170,7 +168,6 @@ export function ReviewSection({ artpieceId, reviews, artpieceTitle }: ReviewSect
                     </p>
                   </div>
                 </div>
-                
                 {/* Rating Display */}
                 {review.rating && (
                   <div className="flex items-center space-x-1">

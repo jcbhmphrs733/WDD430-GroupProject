@@ -41,19 +41,21 @@ export default async function DiscoverPage() {
           {/* Categories Section */}
           <section className="mb-12 sm:mb-16">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 px-2 sm:px-0">Browse by Category</h2>
-            <div className="overflow-hidden px-2 sm:px-0">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 max-w-full">
-                {categories.slice(0, 12).map((category) => (
-                  <Link
-                    key={category.id}
-                    href={`/categories/${category.name.toLowerCase()}`}
-                    className="bg-background-200 hover:bg-background-300 rounded-lg p-3 sm:p-4 text-center hover:shadow-lg transition-all duration-200 border border-background-300 border-gray-900"
-                  >
-                    <h3 className="font-medium text-gray-900 text-xs sm:text-sm">
-                      {category.name}
-                    </h3>
-                  </Link>
-                ))}
+            <div className="max-w-3xl mx-auto px-4">
+              <div className="overflow-hidden">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 max-w-full">
+                  {categories.slice(0, 12).map((category) => (
+                    <Link
+                      key={category.id}
+                      href={`/categories/${category.name.toLowerCase()}`}
+                      className="bg-background-200 hover:bg-background-300 rounded-lg p-3 sm:p-4 text-center hover:shadow-lg transition-all duration-200 border border-background-300 border-gray-900"
+                    >
+                      <h3 className="font-medium text-gray-900 text-xs sm:text-sm">
+                        {category.name}
+                      </h3>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
