@@ -22,7 +22,8 @@ export default async function ProfilePage({ params }: { params: { id: string } }
                   {/* User Image & Name */}
                   <div className="flex items-center gap-4 text-left mb-8 sm:mb-12 pb-0">
                       <Image 
-                      src={user.profile_image_url}
+                      src="/logo-small.png"
+                      // src={user.profile_image_url}
                       width={100}
                       height={150}
                       className="hidden md:block px-2"
