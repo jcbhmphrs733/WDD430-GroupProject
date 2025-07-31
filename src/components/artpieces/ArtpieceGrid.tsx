@@ -30,7 +30,7 @@ export function ArtpieceGrid({
             </h2>
 
             {/* Grid Container */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-6 px-2 sm:px-0">
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-6 px-2 sm:px-0">
                 {artpieces.map((artpiece) => (
                     <ArtpieceCard key={artpiece.id} artpiece={artpiece} />
                 ))}
