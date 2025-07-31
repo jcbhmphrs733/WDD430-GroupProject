@@ -52,10 +52,10 @@ export function Header() {
           {/* Actions */}
           <div className="flex items-center space-x-4">
             <Button variant="secondary" size="sm">
-              Login
+              <Link href="/login">Login</Link>
             </Button>
             <Button variant="secondary" size="sm">
-              Sign Up
+              <Link href="/signup">Sign Up</Link>
             </Button>
           </div>
         </div>

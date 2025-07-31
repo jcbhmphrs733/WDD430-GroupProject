@@ -195,10 +195,11 @@ export async function searchArtpieces(searchTerm: string) {
 export async function getArtpiecesbyUser(userId: string): Promise<ArtpieceWithDetails[]> {
   try {
     const result = await sql`
-      SELECT * FROM artpieces_with_details
-      WHERE user_id = ${userId}
+      SELECT * FROM artpieces
+      WHERE creator_id = ${userId}
       ORDER BY created_at desc
     `;
+    console.log(result)
       
     return result.rows.map(row => ({
       ...row,
