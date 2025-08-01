@@ -43,8 +43,8 @@ export default async function DiscoverPage() {
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 px-2 sm:px-0">Browse by Category</h2>
             <div className="max-w-3xl mx-auto px-4">
               <div className="overflow-hidden">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 max-w-full">
-                  {categories.slice(0, 12).map((category) => (
+                <div className="flex flex-wrap justify-center gap-3 sm:gap-4 max-w-full">
+                  {categories.slice(0, 13).map((category) => (
                     <Link
                       key={category.id}
                       href={`/categories/${category.name.toLowerCase()}`}
@@ -61,7 +61,7 @@ export default async function DiscoverPage() {
           </section>
 
           {/* Recent Artpieces Grid */}
-          {/* <section className="mb-16">
+          <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">More to Explore</h2>
               <Link 
@@ -76,7 +76,7 @@ export default async function DiscoverPage() {
                 <ArtpieceCard key={artpiece.id} artpiece={artpiece} />
               ))}
             </div>
-          </section> */}
+          </section>
 
           {/* Call to Action */}
           <section className="text-center bg-background-200 rounded-lg p-6 sm:p-8 border border-background-300 mx-2 sm:mx-0">
