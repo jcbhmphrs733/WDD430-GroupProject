@@ -14,7 +14,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
       ]);
 
       const shuffledArtpieces = [...userArtpieces].sort(() => Math.random() - 0.5);
-      
+      const profileImage = user.profile_image_url || "/logo-small.png";
 
       return (
           <div className="min-h-screen">
@@ -22,8 +22,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
                   {/* User Image & Name */}
                   <div className="flex items-center gap-4 text-left mb-8 sm:mb-12 pb-0">
                       <Image 
-                      src="/logo-small.png"
-                      // src={user.profile_image_url}
+                      src={profileImage}
                       width={100}
                       height={150}
                       className="hidden md:block px-2"
