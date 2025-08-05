@@ -192,6 +192,36 @@ export async function searchArtpieces(searchTerm: string) {
   }
 }
 
+export async function searchCreators(searchTerm: string) {
+  try {
+    const result = await sql`
+      SELECT 
+        u.id,
+        u.username,
+        u.first_name,
+        u.last_name,
+        u.bio,
+        u.profile_image_url,
+        u.created_at,
+        us.artpieces_count,
+        us.average_rating,
+        us.total_reviews
+      FROM users u
+      LEFT JOIN user_stats us ON u.id = us.id
+      WHERE u.first_name ILIKE ${'%' + searchTerm + '%'}
+         OR u.last_name ILIKE ${'%' + searchTerm + '%'}
+         OR u.username ILIKE ${'%' + searchTerm + '%'}
+         OR u.bio ILIKE ${'%' + searchTerm + '%'}
+         OR to_tsvector('english', u.first_name || ' ' || u.last_name || ' ' || COALESCE(u.bio, '')) @@ plainto_tsquery('english', ${searchTerm})
+      ORDER BY us.artpieces_count DESC NULLS LAST, u.created_at DESC
+    `;
+    return result.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to search creators.');
+  }
+}
+
 export async function getArtpiecesbyUser(userId: string): Promise<ArtpieceWithDetails[]> {
   try {
     const result = await sql`
