@@ -18,7 +18,7 @@ export function SearchForm({ onSearch, placeholder = "Search crafts..." }: Searc
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 w-full max-w-md">
+    <form onSubmit={handleSubmit} className="flex gap-2 w-full max-w-lg mx-auto">
       <input
         type="text"
         value={query}
