@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   title: "Handcrafted Haven",
   description: "Discover unique handcrafted items and share your own creative works with a community of passionate makers and artisans.",
   keywords: ["handcrafted", "artisan", "marketplace", "crafts", "creative", "handmade"],
+  icons: {icon: [{ url: "/favicon.ico" }]},
 };
 
 export default function RootLayout({
