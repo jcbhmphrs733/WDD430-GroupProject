@@ -1,7 +1,7 @@
 import { getFeaturedArtpieces } from '@/lib/database';
-import { ArtpieceCarousel } from '@/components/artpieces/ArtpieceCarousel';
-import { ArtpieceCard } from '@/components/artpieces/ArtpieceCard';
+import { LandingCarousel } from '@/components/artpieces/LandingCarousel';
 import { Button } from "@/components/ui/Button";
+import Link from 'next/link';
 
 export default async function Home() {
 try {
@@ -22,21 +22,24 @@ try {
               </p>
               
               <div className="text-center flex gap-4 items-center flex-col sm:flex-row">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                  Explore
-                </Button>
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                  Become a Creator
-                </Button>
+                <Link href="/explore">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                    Explore
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                    Become a Creator
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
 
         {/* Featured Art Carousel */}
           <section className="mb-12 sm:mb-16 pl-12 pr-12">
-            <ArtpieceCarousel 
+            <LandingCarousel 
               artpieces={featuredArtpieces}
-              title="Featured Art"
               className="mb-6 "
             />
           </section>
@@ -50,7 +53,7 @@ try {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-red-600 mb-4">Oops! Something went wrong</h1>
           <p className="text-gray-600">
-            {error instanceof Error ? error.message : 'Failed to load discover page'}
+            {error instanceof Error ? error.message : 'Failed to load landing page'}
           </p>
         </div>
       </div>
