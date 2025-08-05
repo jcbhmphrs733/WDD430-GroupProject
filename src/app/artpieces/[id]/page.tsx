@@ -63,7 +63,10 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                   {artpiece.title}
                 </h1>
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="flex items-center space-x-2">
+                  <Link 
+                    href={`/profile/${artpiece.creator_id}`}
+                    className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+                  >
                     {artpiece.creator_profile_image && (
                       <div className="relative w-10 h-10 rounded-full overflow-hidden">
                         <Image
@@ -75,14 +78,14 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                       </div>
                     )}
                     <div>
-                      <p className="text-lg font-medium text-gray-800">
+                      <p className="text-lg font-medium text-gray-800 hover:text-gray-900">
                         by {artpiece.creator_name}
                       </p>
                       <p className="text-sm text-gray-600">
                         @{artpiece.creator_username}
                       </p>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
 

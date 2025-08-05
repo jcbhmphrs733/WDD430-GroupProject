@@ -1,62 +1,210 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { getArtpiecesbyUser, getUserById } from '@/lib/database';
 import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
-import Link from 'next/link';
-import Image from 'next/image';
 
-export default async function ProfilePage({ params }: { params: { id: string } }) {
-    try {
-      const p = await params
-      const id = p.id
+interface ProfilePageProps {
+  params: {
+    id: string;
+  };
+}
 
-      const [user, userArtpieces] = await Promise.all([
-          getUserById(id),
-          getArtpiecesbyUser(id)
-      ]);
+export default async function ProfilePage({ params }: ProfilePageProps) {
+  try {
+    const [user, userArtpieces] = await Promise.all([
+      getUserById(params.id),
+      getArtpiecesbyUser(params.id)
+    ]);
 
-      const shuffledArtpieces = [...userArtpieces].sort(() => Math.random() - 0.5);
-      const profileImage = user.profile_image_url || "/logo-small.png";
+    if (!user) {
+      notFound();
+    }
 
-      return (
-          <div className="min-h-screen">
-              <div className=" mx-auto px-2 sm:px-4 pt-6 sm:pt-8">
-                  {/* User Image & Name */}
-                  <div className="flex items-center gap-4 text-left mb-8 sm:mb-12 pb-0">
-                      <Image 
-                      src={profileImage}
-                      width={100}
-                      height={150}
-                      className="hidden md:block px-2 rounded-full object-cover"
-                      alt="Creator Image" />
-                      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 ">{user.first_name} {user.last_name}</h1>
-                  </div>
+    const shuffledArtpieces = [...userArtpieces].sort(() => Math.random() - 0.5);
+    const fullName = `${user.first_name} ${user.last_name}`;
+    
+    // Calculate user stats
+    const totalArtpieces = userArtpieces.length;
+    const totalViews = userArtpieces.reduce((sum, art) => sum + (art.view_count || 0), 0);
+    const totalFavorites = userArtpieces.reduce((sum, art) => sum + (art.favorite_count || 0), 0);
+    const averageRating = userArtpieces.length > 0 
+      ? userArtpieces.reduce((sum, art) => sum + (art.average_rating || 0), 0) / userArtpieces.length 
+      : 0;
 
-                  {/* about me */}
-                  <div>
-                      <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-2 sm:px-0">{user.bio}</p>
-                  </div>
-                  {/* Artpieces sample grid */}
-                  <div>
-                      <section className="mb-12 sm:mb-16 pt-8">
-                          <ArtpieceGrid
-                          artpieces={shuffledArtpieces}
-                          title="My Work"
-                          className="mb-6 sm:mb-8"
-                          />
-                      </section>
-                  </div>
-              </div>
-          </div>
-      )
-    } catch (error) {
     return (
-      <div className="min-h-screen">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Oops! Something went wrong</h1>
-          <p className="text-gray-600">
-            {error instanceof Error ? error.message : 'Failed to load discover page'}
-          </p>
+      <div className="min-h-screen bg-background-100">
+        <div className="max-w-3xl mx-auto px-4 py-6 sm:py-8">
+          {/* Breadcrumb Navigation */}
+          <nav className="mb-6 text-sm">
+            <Link href="/" className="text-gray-500 hover:text-gray-700">
+              Home
+            </Link>
+            <span className="mx-2 text-gray-400">/</span>
+            <Link href="/explore" className="text-gray-500 hover:text-gray-700">
+              Explore
+            </Link>
+            <span className="mx-2 text-gray-400">/</span>
+            <span className="text-gray-900">{fullName}</span>
+          </nav>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+            {/* Profile Image Section */}
+            <div className="order-1 lg:col-span-1">
+              <div className="relative w-48 h-48 mx-auto rounded-lg overflow-hidden shadow-lg border border-background-300 bg-gray-100">
+                {user.profile_image_url ? (
+                  <Image
+                    src={user.profile_image_url}
+                    alt={fullName}
+                    fill
+                    className="object-cover"
+                    sizes="192px"
+                    priority
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                    <span className="text-4xl font-bold text-gray-500">
+                      {user.first_name?.[0]?.toUpperCase() || user.username?.[0]?.toUpperCase() || 'U'}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Details Section */}
+            <div className="order-2 lg:col-span-2 space-y-6">
+              {/* Name and Username */}
+              <div>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
+                  {fullName}
+                </h1>
+                <div className="flex items-center space-x-2 mb-4">
+                  <p className="text-lg text-gray-600">
+                    @{user.username}
+                  </p>
+                  <span className="bg-background-200 text-gray-800 px-2 py-1 rounded-full text-xs font-medium border border-background-400">
+                    Creator
+                  </span>
+                </div>
+              </div>
+
+              {/* Stats */}
+              <div className="border-t border-b border-background-300 py-4">
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <span className="block text-2xl font-bold text-gray-900">
+                      {totalArtpieces}
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      Artpiece{totalArtpieces !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block text-2xl font-bold text-gray-900">
+                      {totalViews.toLocaleString()}
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      Total Views
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Rating Display */}
+                {totalArtpieces > 0 && averageRating > 0 && (
+                  <div className="flex items-center justify-center space-x-2 mt-4 pt-4 border-t border-background-200">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className={`w-5 h-5 ${
+                            i < Math.floor(averageRating)
+                              ? 'text-yellow-400'
+                              : 'text-gray-300'
+                          }`}
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <span className="text-sm text-gray-600">
+                      {averageRating.toFixed(1)} average rating
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Bio */}
+              {user.bio && (
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                    About
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    {user.bio}
+                  </p>
+                </div>
+              )}
+
+              {/* Additional Info */}
+              <div className="bg-background-200 rounded-lg p-4 border border-background-300">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                  Creator Information
+                </h3>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-gray-600">Total Favorites:</span>
+                    <span className="ml-2 font-medium">{totalFavorites}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-600">Member Since:</span>
+                    <span className="ml-2 font-medium">
+                      {new Date(user.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                  Contact Creator
+                </button>
+                <button className="flex-1 bg-background-300 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-background-400 transition-colors border border-background-400">
+                  Follow Creator
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Artpieces Section */}
+          {totalArtpieces > 0 && (
+            <div className="mt-12">
+              <ArtpieceGrid
+                artpieces={shuffledArtpieces}
+                title={`Artpieces by ${fullName}`}
+                className="mb-6 sm:mb-8"
+              />
+            </div>
+          )}
+
+          {totalArtpieces === 0 && (
+            <div className="mt-12 text-center py-12 bg-background-200 rounded-lg border border-background-300">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                No Artpieces Yet
+              </h3>
+              <p className="text-gray-600">
+                {fullName} hasn't created any artpieces yet.
+              </p>
+            </div>
+          )}
+
         </div>
       </div>
     );
+  } catch (error) {
+    console.error('Error loading profile:', error);
+    notFound();
   }
 }

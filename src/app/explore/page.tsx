@@ -54,7 +54,7 @@ export default function ExplorePage() {
         </div>
 
         {/* Search Section */}
-        <div className="mb-8">
+        <div className="mb-8 flex justify-center">
           <SearchForm 
             onSearch={handleSearch}
             placeholder="Search for artpieces, categories, or creators..."
