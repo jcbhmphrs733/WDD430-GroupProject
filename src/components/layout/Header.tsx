@@ -2,8 +2,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
+import { getCurrentUser } from '@/lib/session';
 
-export function Header() {
+export async function Header() {
+  const user = await getCurrentUser();
+
   return (
     <header className="bg-background-600 border-t border-background-600 p-3">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,15 +54,28 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
-            <Button variant="secondary" size="sm">
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button variant="secondary" size="sm">
-              <Link href="/signup">Sign Up</Link>
-            </Button>
+            {!user ? (
+              <>
+                <Button variant="secondary" size="sm">
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button variant="secondary" size="sm">
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="secondary" size="sm">
+                  <Link href="/logout">Logout</Link>
+                </Button>
+                <Button variant="secondary" size="sm">
+                  <Link href={`/profile/${user.id}`}>Profile</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
     </header>
   );
-}
+};

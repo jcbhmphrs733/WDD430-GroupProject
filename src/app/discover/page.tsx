@@ -88,16 +88,16 @@ export default async function DiscoverPage() {
             </p>
             <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 justify-center">
               <Link
-                href="/auth/signup"
+                href="/signup"
                 className="bg-background-300 hover:bg-background-700 text-black px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors border border-gray-900 border-background-400 text-sm sm:text-base"
               >
-                Join as Creator
+                Sign Up
               </Link>
               <Link
-                href="/auth/login"
+                href="/login"
                 className="bg-background-300 hover:bg-background-700 text-black px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors border border-gray-900 border-background-400 text-sm sm:text-base"
               >
-                Sign In
+                Login
               </Link>
             </div>
           </section>

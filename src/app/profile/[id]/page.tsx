@@ -25,7 +25,7 @@ export default async function ProfilePage({ params }: { params: { id: string } }
                       src={profileImage}
                       width={100}
                       height={150}
-                      className="hidden md:block px-2"
+                      className="hidden md:block px-2 rounded-full object-cover"
                       alt="Creator Image" />
                       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 ">{user.first_name} {user.last_name}</h1>
                   </div>

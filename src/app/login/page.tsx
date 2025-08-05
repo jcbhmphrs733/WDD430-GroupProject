@@ -1,4 +1,4 @@
-import { handleLogin } from './actions';
+import { handleLogin } from '../actions/auth';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link'
 
@@ -8,7 +8,7 @@ export default function LoginPage() {
             <h1 className="text-2xl font-bold mb-4">Log In</h1>
             <form action={handleLogin} className="space-y-4">
                 <div>
-                    <label htmlFor="emal" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                         Email
                     </label>
                     <input
@@ -16,7 +16,7 @@ export default function LoginPage() {
                         name="email"
                         type="email"
                         required
-                        className="mt-1 w-full px-3 py-2 border border gray-300 rounded-md shadow-sm"
+                        className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
                     />
                 </div>
 
