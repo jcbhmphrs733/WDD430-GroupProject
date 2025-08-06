@@ -3,6 +3,7 @@
 
 import { testConnection, getAllArtpieces, getAllCategories, checkDatabaseStructure, getAllUsers } from '@/lib/database';
 import { ArtpieceWithDetails, Category, DatabaseStructure, User } from '@/types';
+import DeleteAndReseedButton from './DeleteAndReseedButton';
 
 export default async function TestDatabase() {
   try {
@@ -30,6 +31,8 @@ export default async function TestDatabase() {
     return (
       <div className="p-8">
         <h1 className="text-2xl font-bold mb-4">Database Test Results</h1>
+        
+        <DeleteAndReseedButton />
         
         <div className="mb-6">
           <h2 className="text-lg font-semibold">Connection Test:</h2>
