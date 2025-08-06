@@ -73,7 +73,6 @@ export default async function Home() {
         </section>
       </div>
     );
-
   } catch (error) {
     return (
       <div className="min-h-screen">
@@ -87,3 +86,4 @@ export default async function Home() {
     );
   }
 }
+

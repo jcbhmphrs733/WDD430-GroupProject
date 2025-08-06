@@ -382,3 +382,36 @@ export async function getAllCreators(): Promise<Creator[]> {
     throw new Error('Failed to fetch creators.');
   }
 }
+
+export async function createUser({
+  email,
+  username,
+  first_name,
+  last_name,
+  password,
+  bio,
+  profile_image_url
+}: {
+  email: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+  bio?: string;
+  profile_image_url?: string;
+}) {
+  try {
+    const result = await sql`
+    INSERT INTO users (
+      email, username, first_name, last_name, password_hash, bio, profile_image_url
+      ) VALUES (
+        ${email}, ${username}, ${first_name}, ${last_name}, ${password}, ${bio || null}, ${profile_image_url || null}
+      )
+      RETURNING id;
+    `;
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error - createUser:', error);
+    throw error;
+  }
+}
