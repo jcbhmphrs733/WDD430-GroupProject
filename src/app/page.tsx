@@ -1,9 +1,6 @@
 
 import { getAllArtpieces, getAllCreators } from '@/lib/database';
 import { MixedContentCarousel } from '@/components/artpieces/MixedContentCarousel';
-import { getFeaturedArtpieces } from '@/lib/database';
-import { LandingCarousel } from '@/components/artpieces/LandingCarousel';
-
 import { Button } from "@/components/ui/Button";
 import Link from 'next/link';
 
@@ -29,17 +26,6 @@ export default async function Home() {
               </p>
 
               <div className="text-center flex gap-4 items-center flex-col sm:flex-row">
-
-                <Link href="/login">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                    Login to Explore
-                  </Button>
-                </Link>
-                <Link href="/login">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                    Join as Creator
-                  </Button>
-                </Link>
                 <Link href="/explore">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto">
                     Explore
@@ -61,10 +47,6 @@ export default async function Home() {
               creators={allCreators}
               title="Discover Our Amazing Community"
               className="mb-6"
-            />
-            <LandingCarousel
-              artpieces={await getFeaturedArtpieces()}
-              className="mb-6 "
             />
           </section>
         </main>
