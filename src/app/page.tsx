@@ -38,6 +38,8 @@ export default async function Home() {
                 <Link href="/login">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto">
                     Join as Creator
+                  </Button>
+                </Link>
                 <Link href="/explore">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto">
                     Explore
@@ -59,8 +61,9 @@ export default async function Home() {
               creators={allCreators}
               title="Discover Our Amazing Community"
               className="mb-6"
-            <LandingCarousel 
-              artpieces={featuredArtpieces}
+            />
+            <LandingCarousel
+              artpieces={await getFeaturedArtpieces()}
               className="mb-6 "
             />
           </section>
@@ -89,7 +92,6 @@ export default async function Home() {
         </section>
       </div>
     );
-
   } catch (error) {
     return (
       <div className="min-h-screen">
@@ -101,5 +103,6 @@ export default async function Home() {
         </div>
       </div>
     );
-  }
+    }
 }
+
