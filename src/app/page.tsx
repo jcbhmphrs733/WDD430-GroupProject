@@ -1,20 +1,16 @@
-
-import { getAllArtpieces, getAllCreators, getFeaturedArtpieces } from '@/lib/database';
+import { getAllArtpieces, getAllCreators } from '@/lib/database';
 import { MixedContentCarousel } from '@/components/artpieces/MixedContentCarousel';
-import { LandingCarousel } from '@/components/artpieces/LandingCarousel';
-
 import { Button } from "@/components/ui/Button";
 import Link from 'next/link';
 
 export default async function Home() {
   try {
     // Fetch all artpieces and creators for the mixed carousel
-    // Fetch all artpieces, creators, and featured artpieces for the carousels
-    const [allArtpieces, allCreators, featuredArtpieces] = await Promise.all([
+    const [allArtpieces, allCreators] = await Promise.all([
       getAllArtpieces(),
-      getAllCreators(),
-      getFeaturedArtpieces()
+      getAllCreators()
     ]);
+
 
     return (
       <div >
@@ -29,7 +25,6 @@ export default async function Home() {
               </p>
 
               <div className="text-center flex gap-4 items-center flex-col sm:flex-row">
-
                 <Link href="/login">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto">
                     Login to Explore
@@ -38,16 +33,6 @@ export default async function Home() {
                 <Link href="/login">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto">
                     Join as Creator
-                  </Button>
-                </Link>
-                <Link href="/explore">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                    Explore
-                  </Button>
-                </Link>
-                <Link href="/signup">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                    Become a Creator
                   </Button>
                 </Link>
               </div>
@@ -61,10 +46,6 @@ export default async function Home() {
               creators={allCreators}
               title="Discover Our Amazing Community"
               className="mb-6"
-            />
-            <LandingCarousel 
-              artpieces={featuredArtpieces}
-              className="mb-6 "
             />
           </section>
         </main>
