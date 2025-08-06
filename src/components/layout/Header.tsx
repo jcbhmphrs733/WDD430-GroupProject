@@ -39,12 +39,6 @@ export async function Header() {
               Explore
             </Link>
             <Link 
-              href="/categories" 
-              className="text-text-600 hover:text-text-700 transition-colors font-medium"
-            >
-              Categories
-            </Link>
-            <Link 
               href="/create" 
               className="text-text-600 hover:text-text-700 transition-colors font-medium"
             >

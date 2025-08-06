@@ -12,9 +12,12 @@ interface ProfilePageProps {
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
   try {
+    // Await params first
+    const { id } = await params;
+    
     const [user, userArtpieces] = await Promise.all([
-      getUserById(params.id),
-      getArtpiecesbyUser(params.id)
+      getUserById(id),
+      getArtpiecesbyUser(id)
     ]);
 
     if (!user) {
