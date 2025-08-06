@@ -16,6 +16,7 @@ module.exports = {
           400: '#fff5c5ff',        // Main cream yellow (background)
           500: '#f7f2d4',        // Darker cream
           600: '#1d3557',       // Dark Blue
+          700: '#457b9d',     //some lighter blue
         },
         text: {          
           100: '#94a3b8',        // Light blue-gray          

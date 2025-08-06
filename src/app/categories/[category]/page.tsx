@@ -6,9 +6,12 @@ interface CategoryPageProps {
   };
 }
 
-export default function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  // Await params first
+  const { category } = await params;
+  
   // Normalize category name: replace dashes, trim, capitalize each word
-  const raw = decodeURIComponent(params.category.replace(/-/g, ' ')).trim();
+  const raw = decodeURIComponent(category.replace(/-/g, ' ')).trim();
   const categoryName = raw
     .split(' ')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())

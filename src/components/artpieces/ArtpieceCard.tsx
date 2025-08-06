@@ -10,7 +10,10 @@ interface ArtpieceCardProps {
 
 export function ArtpieceCard({ artpiece, className = "" }: ArtpieceCardProps) {
   return (
-    <div className={`relative rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow border border-background-300 group ${className}`}>
+    <Link 
+      href={`/artpieces/${artpiece.id}`}
+      className={`block relative rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-background-300 group cursor-pointer hover:scale-[1.02] ${className}`}
+    >
       {/* Full Image Background */}
       <div className="relative h-[250px] sm:h-[300px] lg:h-[320px] xl:h-[350px] w-full">
         <Image
@@ -33,15 +36,9 @@ export function ArtpieceCard({ artpiece, className = "" }: ArtpieceCardProps) {
           
           <div className="flex justify-between items-center">
             <span className="text-lg font-bold text-gray-800">${artpiece.price}</span>
-            <Link 
-              href={`/artpieces/${artpiece.id}`}
-              className="bg-gray-800 hover:bg-gray-700 text-white px-3 py-1 rounded-md text-xs transition-colors"
-            >
-              View Details
-            </Link>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
