@@ -1,6 +1,6 @@
 // Database configuration and utility functions for Handcrafted Haven
 import { sql } from '@vercel/postgres';
-import { User, Category, ArtpieceWithDetails, DatabaseStructure, Review } from '@/types';
+import { User, Category, ArtpieceWithDetails, DatabaseStructure, Review, Creator } from '@/types';
 
 export { sql };
 
@@ -114,8 +114,31 @@ export async function getArtpiecesByCategory(categoryName: string) {
 export async function getArtpieceById(artpieceId: string): Promise<ArtpieceWithDetails | null> {
   try {
     const result = await sql`
-      SELECT * FROM artpieces_with_details 
-      WHERE id = ${artpieceId}
+      SELECT 
+        a.id,
+        a.title,
+        a.description,
+        a.price,
+        a.hero_image_url,
+        a.creator_id,
+        a.category_id,
+        a.view_count,
+        a.created_at,
+        a.updated_at,
+        u.username as creator_username,
+        u.first_name || ' ' || u.last_name as creator_name,
+        u.profile_image_url as creator_profile_image,
+        c.name as category_name,
+        COALESCE(AVG(r.rating), 0) as average_rating,
+        COUNT(r.id) as review_count,
+        COUNT(f.id) as favorite_count
+      FROM artpieces a
+      JOIN users u ON a.creator_id = u.id
+      JOIN categories c ON a.category_id = c.id
+      LEFT JOIN reviews r ON a.id = r.artpiece_id
+      LEFT JOIN favorites f ON a.id = f.artpiece_id
+      WHERE a.id = ${artpieceId}
+      GROUP BY a.id, u.id, c.id
     `;
     if (result.rows.length > 0) {
       const row = result.rows[0];
@@ -327,5 +350,35 @@ export async function checkDatabaseStructure(): Promise<DatabaseStructure> {
   } catch (error) {
     console.error('Database Structure Check Error:', error);
     throw new Error('Failed to check database structure.');
+  }
+}
+
+export async function getAllCreators(): Promise<Creator[]> {
+  try {
+    const result = await sql`
+      SELECT 
+        u.id,
+        u.username,
+        u.first_name,
+        u.last_name,
+        u.bio,
+        u.profile_image_url,
+        us.artpieces_count,
+        us.total_favorites_received as total_favorites,
+        us.average_rating,
+        us.total_reviews,
+        COALESCE(SUM(a.view_count), 0) as total_views
+      FROM users u
+      JOIN user_stats us ON u.id = us.id
+      LEFT JOIN artpieces a ON u.id = a.creator_id
+      WHERE us.artpieces_count > 0
+      GROUP BY u.id, u.username, u.first_name, u.last_name, u.bio, u.profile_image_url, 
+               us.artpieces_count, us.total_favorites_received, us.average_rating, us.total_reviews
+      ORDER BY us.total_favorites_received DESC, us.average_rating DESC, us.artpieces_count DESC
+    `;
+    return result.rows as Creator[];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch creators.');
   }
 }

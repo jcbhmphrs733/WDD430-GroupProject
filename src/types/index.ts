@@ -13,6 +13,20 @@ export interface User {
   updated_at: string;
 }
 
+export interface Creator {
+  id: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  bio?: string;
+  profile_image_url?: string;
+  artpieces_count: number;
+  total_favorites: number;
+  average_rating: number;
+  total_reviews: number;
+  total_views: number;
+}
+
 export interface Category {
   id: number;
   name: string;

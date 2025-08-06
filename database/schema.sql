@@ -128,6 +128,8 @@ SELECT
     a.description,
     a.price,
     a.hero_image_url,
+    a.creator_id,
+    a.category_id,
     a.view_count,
     a.created_at,
     a.updated_at,

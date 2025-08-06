@@ -41,8 +41,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               Home
             </Link>
             <span className="mx-2 text-gray-400">/</span>
-            <Link href="/explore" className="text-gray-500 hover:text-gray-700">
-              Explore
+            <Link href="/discover" className="text-gray-500 hover:text-gray-700">
+              Discover
             </Link>
             <span className="mx-2 text-gray-400">/</span>
             <span className="text-gray-900">{fullName}</span>
