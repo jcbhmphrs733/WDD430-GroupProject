@@ -80,7 +80,7 @@ export default async function Home() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-red-600 mb-4">Oops! Something went wrong</h1>
           <p className="text-gray-600">
-            {error instanceof Error ? error.message : 'Failed to load discover page'}
+            {error instanceof Error ? error.message : 'Failed to load landing page'}
           </p>
         </div>
       </div>
