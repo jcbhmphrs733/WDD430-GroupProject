@@ -16,7 +16,7 @@ export default async function DiscoverPage() {
     const shuffledArtpieces = [...allArtpieces].sort(() => Math.random() - 0.5);
     
     // Get a selection of creators to display
-    const featuredCreators = allCreators.slice(0, 8);
+    const featuredCreators = allCreators.slice(0, 6);
 
     return (
       <div className="min-h-screen">
@@ -48,7 +48,7 @@ export default async function DiscoverPage() {
             <div className="max-w-3xl mx-auto px-4">
               <div className="overflow-hidden">
                 <div className="flex flex-wrap justify-center gap-3 sm:gap-4 max-w-full">
-                  {categories.slice(0, 13).map((category) => (
+                  {categories.slice(0, 20).map((category) => (
                     <Link
                       key={category.id}
                       href={`/categories/${category.name.toLowerCase()}`}

@@ -1,4 +1,3 @@
-
 import { getAllArtpieces, getAllCreators } from '@/lib/database';
 import { MixedContentCarousel } from '@/components/artpieces/MixedContentCarousel';
 import { Button } from "@/components/ui/Button";
@@ -26,14 +25,14 @@ export default async function Home() {
               </p>
 
               <div className="text-center flex gap-4 items-center flex-col sm:flex-row">
-                <Link href="/explore">
+                <Link href="/login">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                    Explore
+                    Login to Explore
                   </Button>
                 </Link>
-                <Link href="/signup">
+                <Link href="/login">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                    Become a Creator
+                    Join as Creator
                   </Button>
                 </Link>
               </div>
