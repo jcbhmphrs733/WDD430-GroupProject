@@ -30,7 +30,7 @@ export default async function Home() {
                     Login to Explore
                   </Button>
                 </Link>
-                <Link href="/login">
+                <Link href="/signup">
                   <Button variant="outline" size="lg" className="w-full sm:w-auto">
                     Join as Creator
                   </Button>
