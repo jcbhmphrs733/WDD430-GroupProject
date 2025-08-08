@@ -118,6 +118,9 @@ INSERT INTO categories (name, description) VALUES
 ('Fiber Arts', 'Macramé, weaving, felting, and fiber sculptures'),
 ('Printmaking', 'Screen prints, block prints, and lithographic works'),
 ('Mixed Media', 'Art combining multiple materials and techniques'),
+('Photography', 'Digital and film photography, prints, and photographic art'),
+('Digital Art', 'Computer-generated art, digital illustrations, and digital media'),
+('Home Decor', 'Decorative items for home and living spaces'),
 ('Other', 'Unique artworks that don''t fit standard categories');
 
 -- Views for common queries
@@ -128,6 +131,8 @@ SELECT
     a.description,
     a.price,
     a.hero_image_url,
+    a.creator_id,
+    a.category_id,
     a.view_count,
     a.created_at,
     a.updated_at,

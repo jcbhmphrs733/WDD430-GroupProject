@@ -1,17 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-
-interface Creator {
-  id: string;
-  username: string;
-  first_name: string;
-  last_name: string;
-  bio?: string;
-  profile_image_url?: string;
-  artpieces_count?: number;
-  average_rating?: number | string | null;
-  total_reviews?: number;
-}
+import { Creator } from '@/types';
 
 interface CreatorCardProps {
   creator: Creator;
@@ -20,7 +9,9 @@ interface CreatorCardProps {
 export function CreatorCard({ creator }: CreatorCardProps) {
   const fullName = `${creator.first_name} ${creator.last_name}`;
   const artpiecesCount = creator.artpieces_count || 0;
-  const avgRating = typeof creator.average_rating === 'number' ? creator.average_rating : parseFloat(creator.average_rating || '0') || 0;
+  const avgRating = Number(creator.average_rating) || 0;
+  const totalFavorites = creator.total_favorites || 0;
+  const totalViews = creator.total_views || 0;
 
   return (
     <Link 
@@ -66,6 +57,17 @@ export function CreatorCard({ creator }: CreatorCardProps) {
           {/* Stats */}
           <div className="flex items-center space-x-4 text-xs text-gray-500">
             <span>{artpiecesCount} artpiece{artpiecesCount !== 1 ? 's' : ''}</span>
+            {totalViews > 0 && (
+              <span>{totalViews} view{totalViews !== 1 ? 's' : ''}</span>
+            )}
+            {totalFavorites > 0 && (
+              <span className="flex items-center">
+                <svg className="w-3 h-3 text-red-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                </svg>
+                {totalFavorites}
+              </span>
+            )}
             {avgRating > 0 && (
               <span className="flex items-center">
                 <svg className="w-3 h-3 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
