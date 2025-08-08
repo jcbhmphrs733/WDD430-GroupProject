@@ -1,6 +1,6 @@
 'use server';
 import { redirect } from 'next/navigation';
-import { putArt, postNewArt } from '@/lib/database';
+import { putArt, postNewArt, getArtpieceById } from '@/lib/database';
 
 export async function updateArtpiece(formData: FormData) {
 
@@ -11,9 +11,11 @@ export async function updateArtpiece(formData: FormData) {
     const hero_image_url = formData.get('hero_image_url')?.toString() ?? '';
     const category_id = Number(formData.get('category_id')?.toString() ?? '');
     const updated_at = formData.get('updated_at')?.toString() ?? '';
-    console.log("LOOK HERE");
     
+
     putArt(art_id, title, description, price, hero_image_url, category_id, updated_at);
+    // const artpiece = await getArtpieceById(art_id);
+    // console.log("LOOK HERE " + artpiece.title);
 
     redirect(`/artpieces/${art_id}/`);
 }

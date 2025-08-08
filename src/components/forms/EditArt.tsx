@@ -1,4 +1,4 @@
-import { updateArtpiece } from "@/app/actions/artpieces";
+import { updateArtpiece } from "@/app/artpieces/[id]/edit/artpieces";
 import { getArtpieceById } from "@/lib/database";
 
 
