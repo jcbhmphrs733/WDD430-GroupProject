@@ -416,19 +416,21 @@ export async function createUser({
 }
 
 // possibly use to add in the art
-export async function postNewArt(title: string, description: string, price: number, hero_image_url: string, category_id: string, UUID: string, created_at: string, updated_at: string ) {
+export async function postNewArt(title: string, description: string, price: number, hero_image_url: string, category_id: number, creator_id: string, created_at: string, updated_at: string ) {
   try {
     const result = await sql`
-    INSERT INTO artpieces (title, description, price, hero_image_url, creator_id, category_id, created_at, updated_at)
-    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${UUID}, ${category_id}, ${created_at}, ${updated_at},)
+    INSERT INTO artpieces (title, description, price, hero_image_url, creator_id, category_id, view_count, created_at, updated_at)
+    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${creator_id}, ${category_id}, DEFAULT, ${created_at}, ${updated_at},)
+    RETURNING id;
     `;
+    return result.rows[0];
   } catch(error) {
     console.error('Database Connection Error:', error);
     throw new Error('Failed to connect to database.');
   }
 }
 
-// possibly use to edit in the art
+// use to edit in the art
 export async function putArt(art_id: string, title: string, description: string, price: number, hero_image_url: string, category_id: number, updated_at: string ) {
   try {
     const result = await sql`
