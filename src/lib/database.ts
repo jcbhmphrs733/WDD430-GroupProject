@@ -1,6 +1,6 @@
 // Database configuration and utility functions for Handcrafted Haven
 import { sql } from '@vercel/postgres';
-import { User, Category, ArtpieceWithDetails, DatabaseStructure, Review } from '@/types';
+import { User, Category, ArtpieceWithDetails, DatabaseStructure, Review, Creator } from '@/types';
 
 export { sql };
 
@@ -114,8 +114,31 @@ export async function getArtpiecesByCategory(categoryName: string) {
 export async function getArtpieceById(artpieceId: string): Promise<ArtpieceWithDetails | null> {
   try {
     const result = await sql`
-      SELECT * FROM artpieces_with_details 
-      WHERE id = ${artpieceId}
+      SELECT 
+        a.id,
+        a.title,
+        a.description,
+        a.price,
+        a.hero_image_url,
+        a.creator_id,
+        a.category_id,
+        a.view_count,
+        a.created_at,
+        a.updated_at,
+        u.username as creator_username,
+        u.first_name || ' ' || u.last_name as creator_name,
+        u.profile_image_url as creator_profile_image,
+        c.name as category_name,
+        COALESCE(AVG(r.rating), 0) as average_rating,
+        COUNT(r.id) as review_count,
+        COUNT(f.id) as favorite_count
+      FROM artpieces a
+      JOIN users u ON a.creator_id = u.id
+      JOIN categories c ON a.category_id = c.id
+      LEFT JOIN reviews r ON a.id = r.artpiece_id
+      LEFT JOIN favorites f ON a.id = f.artpiece_id
+      WHERE a.id = ${artpieceId}
+      GROUP BY a.id, u.id, c.id
     `;
     if (result.rows.length > 0) {
       const row = result.rows[0];
@@ -330,29 +353,65 @@ export async function checkDatabaseStructure(): Promise<DatabaseStructure> {
   }
 }
 
-// possibly use to add in the art
-export async function postNewArt(title: string, description: string, price: number, hero_image_url: string, category_id: string, UUID: string, created_at: string, updated_at: string ) {
+export async function getAllCreators(): Promise<Creator[]> {
   try {
     const result = await sql`
-    INSERT INTO artpieces (title, description, price, hero_image_url, creator_id, category_id, created_at, updated_at)
-    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${UUID}, ${category_id}, ${created_at}, ${updated_at},)
+      SELECT 
+        u.id,
+        u.username,
+        u.first_name,
+        u.last_name,
+        u.bio,
+        u.profile_image_url,
+        us.artpieces_count,
+        us.total_favorites_received as total_favorites,
+        us.average_rating,
+        us.total_reviews,
+        COALESCE(SUM(a.view_count), 0) as total_views
+      FROM users u
+      JOIN user_stats us ON u.id = us.id
+      LEFT JOIN artpieces a ON u.id = a.creator_id
+      WHERE us.artpieces_count > 0
+      GROUP BY u.id, u.username, u.first_name, u.last_name, u.bio, u.profile_image_url, 
+               us.artpieces_count, us.total_favorites_received, us.average_rating, us.total_reviews
+      ORDER BY us.total_favorites_received DESC, us.average_rating DESC, us.artpieces_count DESC
     `;
-  } catch(error) {
-    console.error('Database Connection Error:', error);
-    throw new Error('Failed to connect to database.');
+    return result.rows as Creator[];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch creators.');
   }
 }
 
-// possibly use to edit in the art
-export async function putArt(art_id: string, title: string, description: string, price: number, hero_image_url: string, category_id: number, updated_at: string ) {
+export async function createUser({
+  email,
+  username,
+  first_name,
+  last_name,
+  password,
+  bio,
+  profile_image_url
+}: {
+  email: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+  bio?: string;
+  profile_image_url?: string;
+}) {
   try {
     const result = await sql`
-    UPDATE artpieces 
-    SET title = ${title}, description = ${description}, price = ${price}, hero_image_url = ${hero_image_url}, category_id = ${category_id}, updated_at = ${updated_at})
-    WHERE id = ${art_id}
+    INSERT INTO users (
+      email, username, first_name, last_name, password_hash, bio, profile_image_url
+      ) VALUES (
+        ${email}, ${username}, ${first_name}, ${last_name}, ${password}, ${bio || null}, ${profile_image_url || null}
+      )
+      RETURNING id;
     `;
-  } catch(error) {
-    console.error('Database Connection Error:', error);
-    throw new Error('Failed to connect to database.');
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error - createUser:', error);
+    throw error;
   }
 }

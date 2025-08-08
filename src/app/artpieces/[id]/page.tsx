@@ -12,9 +12,12 @@ interface ArtpiecePageProps {
 
 export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
   try {
+    // Await params first
+    const { id } = await params;
+    
     const [artpiece, reviews] = await Promise.all([
-      getArtpieceById(params.id),
-      getArtpieceReviews(params.id)
+      getArtpieceById(id),
+      getArtpieceReviews(id)
     ]);
 
     if (!artpiece) {
@@ -22,7 +25,7 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
     }
 
     // Increment view count (don't await to avoid blocking page load)
-    incrementArtpieceViews(params.id).catch(console.error);
+    incrementArtpieceViews(id).catch(console.error);
 
     return (
       <div className="min-h-screen bg-background-100">
@@ -179,7 +182,7 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
           {/* Reviews Section */}
           <div className="mt-12">
             <ReviewSection 
-              artpieceId={params.id} 
+              artpieceId={id} 
               reviews={reviews}
               artpieceTitle={artpiece.title}
             />
