@@ -3,7 +3,7 @@ import { getArtpieceById } from "@/lib/database";
 
 
 export async function EditArt(artpieceId: any){
-    const timestamp: number = Date.now();
+    const timestamp: string = new Date().toISOString();
     
     
     const artpiece = await getArtpieceById(artpieceId.artpieceId);

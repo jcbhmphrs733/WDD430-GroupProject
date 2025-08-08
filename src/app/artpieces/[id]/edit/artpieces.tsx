@@ -13,7 +13,7 @@ export async function updateArtpiece(formData: FormData) {
     const updated_at = formData.get('updated_at')?.toString() ?? '';
     
 
-    putArt(art_id, title, description, price, hero_image_url, category_id, updated_at);
+    await putArt(art_id, title, description, price, hero_image_url, category_id, updated_at);
     // const artpiece = await getArtpieceById(art_id);
     // console.log("LOOK HERE " + artpiece.title);
 
