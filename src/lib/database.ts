@@ -434,9 +434,10 @@ export async function putArt(art_id: string, title: string, description: string,
   try {
     const result = await sql`
     UPDATE artpieces 
-    SET title = ${title}, description = ${description}, price = ${price}, hero_image_url = ${hero_image_url}, category_id = ${category_id}, updated_at = ${updated_at})
+    SET title = ${title}, description = ${description}, price = ${price}, hero_image_url = ${hero_image_url}, category_id = ${category_id}, updated_at = ${updated_at}
     WHERE id = ${art_id}
     `;
+    return result;
   } catch(error) {
     console.error('Database Connection Error:', error);
     throw new Error('Failed to connect to database.');
