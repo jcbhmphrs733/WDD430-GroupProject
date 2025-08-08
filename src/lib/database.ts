@@ -26,7 +26,6 @@ export async function getUserById(userId: string) {
       FROM users 
       WHERE id = ${userId}
     `;
-    console.log(result.rows[0]);
     return result.rows[0] || null;
   } catch (error) {
     console.error('Database Error:', error);
@@ -141,6 +140,7 @@ export async function getArtpieceById(artpieceId: string): Promise<ArtpieceWithD
       WHERE a.id = ${artpieceId}
       GROUP BY a.id, u.id, c.id
     `;
+    console.log(result.rows[0])
     if (result.rows.length > 0) {
       const row = result.rows[0];
       return {
@@ -252,9 +252,7 @@ export async function getArtpiecesbyUser(userId: string): Promise<ArtpieceWithDe
       SELECT * FROM artpieces
       WHERE creator_id = ${userId}
       ORDER BY created_at desc
-    `;
-    console.log(result)
-      
+    `;      
     return result.rows.map(row => ({
       ...row,
       price: Number(row.price),
@@ -401,7 +399,6 @@ export async function createUser({
   bio?: string;
   profile_image_url?: string;
 }) {
-  console.log('bio', bio);
   try {
     const result = await sql`
     INSERT INTO users (

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArtpieceById, getArtpieceReviews, incrementArtpieceViews } from '@/lib/database';
 import { ReviewSection } from '@/components/reviews/ReviewSection';
+import { getCurrentUser } from '@/lib/session';
 
 interface ArtpiecePageProps {
   params: {
@@ -22,6 +23,12 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
 
     if (!artpiece) {
       notFound();
+    }
+    let loggedIn = false;
+    const currentUser = await getCurrentUser();
+
+    if (currentUser && String(currentUser.id) === String(artpiece.creator_id)) {
+      loggedIn = true;
     }
 
     // Increment view count (don't await to avoid blocking page load)
@@ -55,6 +62,20 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority
                 />
+              </div>
+
+              {/*Create button */}
+              <div className="flex mt-6 justify-center">
+                {!loggedIn ? (
+                  <></>
+                ) : (
+                <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                  <Link 
+                    href={`/artpieces/${artpiece.id}/edit`}>Edit
+                  </Link>
+                  {/*update href when fullsite available */}
+                </button>
+                )} 
               </div>
             </div>
 
