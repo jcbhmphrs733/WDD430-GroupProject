@@ -1,6 +1,6 @@
 'use server';
 import { redirect } from 'next/navigation';
-import { putArt, postNewArt, getArtpieceById } from '@/lib/database';
+import { putArt } from '@/lib/database';
 
 export async function updateArtpiece(formData: FormData) {
 
@@ -14,8 +14,7 @@ export async function updateArtpiece(formData: FormData) {
     
 
     await putArt(art_id, title, description, price, hero_image_url, category_id, updated_at);
-    // const artpiece = await getArtpieceById(art_id);
-    // console.log("LOOK HERE " + artpiece.title);
+
 
     redirect(`/artpieces/${art_id}/`);
 }
