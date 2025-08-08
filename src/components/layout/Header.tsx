@@ -3,9 +3,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { getCurrentUser } from '@/lib/session';
+import { getUserById } from '@/lib/database';
 
 export async function Header() {
   const user = await getCurrentUser();
+  const userInfo = user ? await getUserById(String(user.id)) : null;
 
   return (
     <header className="bg-background-600 border-t border-background-600 p-3">
@@ -59,6 +61,9 @@ export async function Header() {
               </>
             ) : (
               <>
+                <h1 className="text-text-600 hover:text-text-700 transition-colors font-medium">
+                  Welcome {userInfo ? `${userInfo.first_name} ${userInfo.last_name}` : 'User'}!
+                </h1>
                 <Button variant="secondary" size="sm">
                   <Link href="/logout">Logout</Link>
                 </Button>

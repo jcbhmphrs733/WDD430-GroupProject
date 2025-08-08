@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArtpiecesbyUser, getUserById } from '@/lib/database';
 import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
+import FallbackImage from '@/components/profile/fallbackimage';
 
 interface ProfilePageProps {
   params: {
@@ -56,7 +57,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             <div className="order-1 lg:col-span-1">
               <div className="relative w-48 h-48 mx-auto rounded-lg overflow-hidden shadow-lg border border-background-300 bg-gray-100">
                 {user.profile_image_url ? (
-                  <Image
+                  <FallbackImage
                     src={user.profile_image_url}
                     alt={fullName}
                     fill

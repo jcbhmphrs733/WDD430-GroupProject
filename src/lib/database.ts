@@ -26,6 +26,7 @@ export async function getUserById(userId: string) {
       FROM users 
       WHERE id = ${userId}
     `;
+    console.log(result.rows[0]);
     return result.rows[0] || null;
   } catch (error) {
     console.error('Database Error:', error);
@@ -400,12 +401,13 @@ export async function createUser({
   bio?: string;
   profile_image_url?: string;
 }) {
+  console.log('bio', bio);
   try {
     const result = await sql`
     INSERT INTO users (
       email, username, first_name, last_name, password_hash, bio, profile_image_url
       ) VALUES (
-        ${email}, ${username}, ${first_name}, ${last_name}, ${password}, ${bio || null}, ${profile_image_url || null}
+        ${email}, ${username}, ${first_name}, ${last_name}, ${password}, ${bio}, ${profile_image_url}
       )
       RETURNING id;
     `;
