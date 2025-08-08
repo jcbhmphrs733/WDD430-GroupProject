@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Review } from '@/types';
+import { submitReview } from '@/app/actions/reviews';
 
 interface ReviewSectionProps {
   artpieceId: string;
@@ -15,23 +16,38 @@ export function ReviewSection({ artpieceId, reviews, artpieceTitle }: ReviewSect
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setMessage(null);
     
     try {
-      // TODO: Implement review submission when auth is ready
-      console.log('Submitting review:', { artpieceId, rating, comment });
+      const formData = new FormData();
+      formData.append('artpieceId', artpieceId);
+      formData.append('rating', rating.toString());
+      formData.append('comment', comment);
       
-      // Reset form
-      setComment('');
-      setRating(5);
-      setShowReviewForm(false);
+      const result = await submitReview(formData);
       
-      // TODO: Refresh reviews or update state
+      if (result.success) {
+        setMessage({ type: 'success', text: result.message });
+        // Reset form
+        setComment('');
+        setRating(5);
+        setShowReviewForm(false);
+        // Optionally refresh the page to show the new review
+        window.location.reload();
+      } else {
+        setMessage({ type: 'error', text: result.message });
+      }
     } catch (error) {
       console.error('Error submitting review:', error);
+      setMessage({ 
+        type: 'error', 
+        text: error instanceof Error ? error.message : 'Failed to submit review' 
+      });
     } finally {
       setSubmitting(false);
     }
@@ -58,6 +74,18 @@ export function ReviewSection({ artpieceId, reviews, artpieceTitle }: ReviewSect
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Write a Review for "{artpieceTitle}"
           </h3>
+          
+          {/* Message Display */}
+          {message && (
+            <div className={`mb-4 p-3 rounded-lg ${
+              message.type === 'success' 
+                ? 'bg-green-100 text-green-800 border border-green-300' 
+                : 'bg-red-100 text-red-800 border border-red-300'
+            }`}>
+              {message.text}
+            </div>
+          )}
+          
           <form onSubmit={handleSubmitReview} className="space-y-4">
             {/* Rating Selection */}
             <div>

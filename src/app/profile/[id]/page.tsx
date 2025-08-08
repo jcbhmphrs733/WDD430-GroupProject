@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArtpiecesbyUser, getUserById } from '@/lib/database';
+import { getCurrentUser } from '@/lib/session';
 import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
 
 interface ProfilePageProps {
@@ -15,7 +16,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     // Await params first
     const { id } = await params;
     
-    const [user, userArtpieces] = await Promise.all([
+    // Get current logged-in user and profile user data
+    const [currentUser, user, userArtpieces] = await Promise.all([
+      getCurrentUser(),
       getUserById(id),
       getArtpiecesbyUser(id)
     ]);
@@ -23,6 +26,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     if (!user) {
       notFound();
     }
+
+    // Check if the current user is viewing their own profile
+    const isOwnProfile = currentUser && currentUser.id.toString() === id;
 
     const shuffledArtpieces = [...userArtpieces].sort(() => Math.random() - 0.5);
     const fullName = `${user.first_name} ${user.last_name}`;
@@ -171,12 +177,33 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3">
-                <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                  Contact Creator
-                </button>
-                <button className="flex-1 bg-background-300 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-background-400 transition-colors border border-background-400">
-                  Follow Creator
-                </button>
+                {isOwnProfile ? (
+                  // Show Edit Profile and View Favorites buttons for own profile
+                  <>
+                    <Link 
+                      href={`/profile/${id}/edit`}
+                      className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
+                    >
+                      Edit Profile
+                    </Link>
+                    <Link 
+                      href={`/profile/${id}/favorites`}
+                      className="flex-1 bg-background-300 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-background-400 transition-colors border border-background-400 text-center"
+                    >
+                      View Favorites
+                    </Link>
+                  </>
+                ) : (
+                  // Show Contact Creator and Follow Creator buttons for other profiles
+                  <>
+                    <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                      Contact Creator
+                    </button>
+                    <button className="flex-1 bg-background-300 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-background-400 transition-colors border border-background-400">
+                      Follow Creator
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>

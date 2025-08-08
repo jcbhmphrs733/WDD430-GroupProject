@@ -443,3 +443,30 @@ export async function putArt(art_id: string, title: string, description: string,
     throw new Error('Failed to connect to database.');
   }
 }
+
+// Add a new review
+export async function addReview(artpieceId: string, reviewerId: string, rating: number, comment?: string): Promise<Review> {
+  try {
+    const result = await sql`
+      INSERT INTO reviews (artpiece_id, reviewer_id, rating, comment)
+      VALUES (${artpieceId}, ${reviewerId}, ${rating}, ${comment || null})
+      RETURNING 
+        id,
+        artpiece_id,
+        reviewer_id,
+        rating,
+        comment,
+        created_at,
+        updated_at
+    `;
+    
+    if (result.rows.length === 0) {
+      throw new Error('Failed to create review');
+    }
+    
+    return result.rows[0] as Review;
+  } catch (error) {
+    console.error('Database Connection Error:', error);
+    throw new Error('Failed to add review to database.');
+  }
+}
