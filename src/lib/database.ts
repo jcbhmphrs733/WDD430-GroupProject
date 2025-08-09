@@ -300,7 +300,7 @@ export async function getReviewsForArtpiece(artpieceId: string) {
 }
 
 // Favorites-related functions
-export async function getUserFavorites(userId: string) {
+export async function getUserFavorites(userId: string): Promise<ArtpieceWithDetails[]> {
   try {
     const result = await sql`
       SELECT a.* FROM artpieces_with_details a
@@ -308,10 +308,55 @@ export async function getUserFavorites(userId: string) {
       WHERE f.user_id = ${userId}
       ORDER BY f.created_at DESC
     `;
-    return result.rows;
+    return result.rows as ArtpieceWithDetails[];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch user favorites.');
+  }
+}
+
+// Check if an artpiece is favorited by a user
+export async function isArtpieceFavorited(userId: string, artpieceId: string): Promise<boolean> {
+  try {
+    const result = await sql`
+      SELECT id FROM favorites
+      WHERE user_id = ${userId} AND artpiece_id = ${artpieceId}
+    `;
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to check favorite status.');
+  }
+}
+
+// Add an artpiece to user's favorites
+export async function addToFavorites(userId: string, artpieceId: string) {
+  try {
+    const result = await sql`
+      INSERT INTO favorites (user_id, artpiece_id)
+      VALUES (${userId}, ${artpieceId})
+      ON CONFLICT (user_id, artpiece_id) DO NOTHING
+      RETURNING id
+    `;
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to add to favorites.');
+  }
+}
+
+// Remove an artpiece from user's favorites
+export async function removeFromFavorites(userId: string, artpieceId: string) {
+  try {
+    const result = await sql`
+      DELETE FROM favorites
+      WHERE user_id = ${userId} AND artpiece_id = ${artpieceId}
+      RETURNING id
+    `;
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to remove from favorites.');
   }
 }
 

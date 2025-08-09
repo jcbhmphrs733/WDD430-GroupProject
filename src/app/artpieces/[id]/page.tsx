@@ -1,8 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getArtpieceById, getArtpieceReviews, incrementArtpieceViews } from '@/lib/database';
+import { getArtpieceById, getArtpieceReviews, incrementArtpieceViews, isArtpieceFavorited } from '@/lib/database';
+import { getCurrentUser } from '@/lib/session';
 import { ReviewSection } from '@/components/reviews/ReviewSection';
+import { FavoriteButton } from '@/components/artpieces/FavoriteButton';
 
 interface ArtpiecePageProps {
   params: {
@@ -15,13 +17,21 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
     // Await params first
     const { id } = await params;
     
-    const [artpiece, reviews] = await Promise.all([
+    // Get current user and artpiece data
+    const [currentUser, artpiece, reviews] = await Promise.all([
+      getCurrentUser(),
       getArtpieceById(id),
       getArtpieceReviews(id)
     ]);
 
     if (!artpiece) {
       notFound();
+    }
+
+    // Check if the artpiece is favorited by the current user
+    let isFavorited = false;
+    if (currentUser) {
+      isFavorited = await isArtpieceFavorited(currentUser.id.toString(), id);
     }
 
     // Increment view count (don't await to avoid blocking page load)
@@ -172,9 +182,11 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                 <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
                   Contact Creator
                 </button>
-                <button className="flex-1 bg-background-300 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-background-400 transition-colors border border-background-400">
-                  Add to Favorites ♡
-                </button>
+                <FavoriteButton 
+                  artpieceId={id}
+                  initialFavorited={isFavorited}
+                  isLoggedIn={!!currentUser}
+                />
               </div>
             </div>
           </div>

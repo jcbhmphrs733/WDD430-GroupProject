@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/session';
-import { getUserById } from '@/lib/database';
+import { getUserById, getUserFavorites } from '@/lib/database';
 import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
 import Link from 'next/link';
 
@@ -30,9 +30,8 @@ export default async function FavoritesPage({ params }: FavoritesPageProps) {
       notFound();
     }
 
-    // TODO: You'll need to create a function to get user's favorite artpieces
-    // For now, we'll use an empty array as placeholder
-    const favoriteArtpieces: any[] = []; // Replace with actual function call
+    // Get user's favorite artpieces
+    const favoriteArtpieces = await getUserFavorites(id);
 
     return (
       <div className="min-h-screen bg-background-100">
