@@ -79,6 +79,11 @@ export default async function TestDatabase() {
           ) : (
             <div>
               <p className="mb-2">Found {artpieces.length} artpieces</p>
+              <ul className="list-disc list-inside">
+            {artpieces.map(art => (
+              <li key={art.id}>{art.title}, {art.price} | {art.id}</li>
+            ))}
+          </ul>
             </div>
           )}
         </div>
