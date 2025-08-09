@@ -37,8 +37,6 @@ export function AddArt(userId: any){
                 <option value="2">Woodworking</option>
             </select>
             <input type="hidden" id="creator_id" name="creator_id" value={creator_id}></input>
-            <input type="hidden" id="created_at" name="created_at" value={timestamp}></input>
-            <input type="hidden" id="updated_at" name="updated_at" value={timestamp}></input>
             <input type="submit" value="Submit" className="self-center w-2/5 cursor-pointer rounded-lg font-semibold bg-background-500 text-text-500 p-1 mt-5 hover:bg-background-600 hover:text-text-600 "></input>
         
         </form>
