@@ -140,7 +140,6 @@ export async function getArtpieceById(artpieceId: string): Promise<ArtpieceWithD
       WHERE a.id = ${artpieceId}
       GROUP BY a.id, u.id, c.id
     `;
-    console.log(result.rows[0])
     if (result.rows.length > 0) {
       const row = result.rows[0];
       return {
