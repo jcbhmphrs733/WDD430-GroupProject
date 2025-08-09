@@ -35,21 +35,23 @@ export async function deleteArtpiece(artpieceId: string) {
       };
     }
 
-    // Begin transaction to delete related records first
-    await sql`BEGIN`;
-
+    // Delete related records and the artpiece
     try {
-      // Delete related reviews
+      // Delete related reviews first
       await sql`DELETE FROM reviews WHERE artpiece_id = ${artpieceId}`;
       
       // Delete related favorites
-      await sql`DELETE FROM user_favorites WHERE artpiece_id = ${artpieceId}`;
+      await sql`DELETE FROM favorites WHERE artpiece_id = ${artpieceId}`;
       
       // Delete the artpiece itself
-      await sql`DELETE FROM artpieces WHERE id = ${artpieceId}`;
+      const deleteResult = await sql`DELETE FROM artpieces WHERE id = ${artpieceId}`;
       
-      // Commit the transaction
-      await sql`COMMIT`;
+      if (deleteResult.rowCount === 0) {
+        return {
+          success: false,
+          message: 'Artpiece not found or already deleted'
+        };
+      }
       
       // Revalidate relevant pages
       revalidatePath('/discover');
@@ -60,13 +62,33 @@ export async function deleteArtpiece(artpieceId: string) {
         success: true,
         message: 'Artpiece deleted successfully'
       };
-    } catch (error) {
-      // Rollback the transaction on error
-      await sql`ROLLBACK`;
-      throw error;
+    } catch (deleteError) {
+      console.error('Database error during deletion:', deleteError);
+      throw deleteError;
     }
   } catch (error) {
     console.error('Error deleting artpiece:', error);
+    
+    // Provide more specific error messages based on the error type
+    if (error instanceof Error) {
+      if (error.message.includes('foreign key')) {
+        return {
+          success: false,
+          message: 'Cannot delete artpiece: it has associated reviews or favorites that cannot be removed.'
+        };
+      }
+      if (error.message.includes('not found')) {
+        return {
+          success: false,
+          message: 'Artpiece not found.'
+        };
+      }
+      return {
+        success: false,
+        message: `Failed to delete artpiece: ${error.message}`
+      };
+    }
+    
     return {
       success: false,
       message: 'Failed to delete artpiece. Please try again.'

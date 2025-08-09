@@ -29,16 +29,18 @@ export function DeleteArtButton({ artpieceId, artpieceTitle }: DeleteArtButtonPr
       const result = await deleteArtpiece(artpieceId);
       
       if (result.success) {
-        // Redirect to the user's profile or discover page after successful deletion
-        router.push('/profile?deleted=true');
+        // Redirect to discover page after successful deletion
+        router.push('/discover?deleted=true');
       } else {
         setError(result.message);
         setIsDeleting(false);
+        setShowConfirmDialog(false); // Close dialog to show error message
       }
     } catch (error) {
       console.error('Error deleting artpiece:', error);
       setError('Failed to delete artpiece. Please try again.');
       setIsDeleting(false);
+      setShowConfirmDialog(false); // Close dialog to show error message
     }
   };
 
