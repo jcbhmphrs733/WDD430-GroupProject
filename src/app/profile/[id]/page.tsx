@@ -1,10 +1,11 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArtpiecesbyUser, getUserById } from '@/lib/database';
 import { getCurrentUser } from '@/lib/session';
 import { getUserAvatarColor } from '@/lib/utils';
 import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
+import FallbackImage from '@/components/profile/fallbackimage';
+import { getCurrentUser } from '@/lib/session';
 
 interface ProfilePageProps {
   params: {
@@ -15,7 +16,14 @@ interface ProfilePageProps {
 export default async function ProfilePage({ params }: ProfilePageProps) {
   try {
     // Await params first
+    let loggedIn = false
     const { id } = await params;
+
+    const currentUser = await getCurrentUser();
+
+    if (currentUser && String(currentUser.id) === id) {
+      loggedIn = true
+    }
     
     // Get current logged-in user and profile user data
     const [currentUser, user, userArtpieces] = await Promise.all([
@@ -64,10 +72,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             {/* Profile Image Section */}
-            <div className="order-1 lg:col-span-1">
+            <div className="order-1 lg:col-span-1 row-start-1 row-end-2">
               <div className="relative w-48 h-48 mx-auto rounded-lg overflow-hidden shadow-lg border border-background-300 bg-gray-100">
                 {user.profile_image_url ? (
-                  <Image
+                  <FallbackImage
                     src={user.profile_image_url}
                     alt={fullName}
                     fill
@@ -84,6 +92,19 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                       {user.first_name?.[0]?.toUpperCase() || user.username?.[0]?.toUpperCase() || 'U'}
                     </span>
                   </div>
+                )}
+              </div>
+              {/*Create button */}
+              <div className="flex mt-6 justify-center">
+                {!loggedIn ? (
+                  <></>
+                ) : (
+                <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                  <Link 
+                    href="/create">Create
+                  </Link>
+                  {/*update href when fullsite available */}
+                </button>
                 )}
               </div>
             </div>

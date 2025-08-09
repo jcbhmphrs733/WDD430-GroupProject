@@ -72,6 +72,9 @@ export async function Header() {
               </>
             ) : (
               <>
+                <h1 className="text-text-600 hover:text-text-700 transition-colors font-medium">
+                  Welcome {userDetails ? `${userDetails.first_name} ${userDetails.last_name}` : 'User'}!
+                </h1>
                 <Button variant="secondary" size="sm">
                   <Link href="/logout">Logout</Link>
                 </Button>

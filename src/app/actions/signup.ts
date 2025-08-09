@@ -19,8 +19,6 @@ export async function signup(formData: FormData) {
     first_name,
     last_name,
     password, // passing plaintext password directly
-    bio: bio || undefined, // Pass bio if provided, otherwise undefined
-    profile_image_url: profile_image_url || undefined, // Pass profile_image_url if provided, otherwise undefined
   })
 
   redirect('/login')

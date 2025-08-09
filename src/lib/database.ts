@@ -140,6 +140,7 @@ export async function getArtpieceById(artpieceId: string): Promise<ArtpieceWithD
       WHERE a.id = ${artpieceId}
       GROUP BY a.id, u.id, c.id
     `;
+    console.log(result.rows[0])
     if (result.rows.length > 0) {
       const row = result.rows[0];
       return {
@@ -251,9 +252,7 @@ export async function getArtpiecesbyUser(userId: string): Promise<ArtpieceWithDe
       SELECT * FROM artpieces_with_details
       WHERE creator_id = ${userId}
       ORDER BY created_at desc
-    `;
-    console.log(result)
-      
+    `;      
     return result.rows.map(row => ({
       ...row,
       price: Number(row.price),
@@ -482,7 +481,7 @@ export async function createUser({
     INSERT INTO users (
       email, username, first_name, last_name, password_hash, bio, profile_image_url
       ) VALUES (
-        ${email}, ${username}, ${first_name}, ${last_name}, ${password}, ${bio || null}, ${profile_image_url || null}
+        ${email}, ${username}, ${first_name}, ${last_name}, ${password}, ${bio}, ${profile_image_url}
       )
       RETURNING id;
     `;
@@ -536,19 +535,21 @@ export async function updateUser(userId: string, {
 }
 
 // possibly use to add in the art
-export async function postNewArt(title: string, description: string, price: number, hero_image_url: string, category_id: string, UUID: string, created_at: string, updated_at: string ) {
+export async function postNewArt(title: string, description: string, price: number, hero_image_url: string, category_id: number, creator_id: string, created_at: string, updated_at: string ) {
   try {
     const result = await sql`
-    INSERT INTO artpieces (title, description, price, hero_image_url, creator_id, category_id, created_at, updated_at)
-    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${UUID}, ${category_id}, ${created_at}, ${updated_at},)
+    INSERT INTO artpieces (title, description, price, hero_image_url, creator_id, category_id, view_count, created_at, updated_at)
+    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${creator_id}, ${category_id}, DEFAULT, ${created_at}, ${updated_at},)
+    RETURNING id;
     `;
+    return result.rows[0];
   } catch(error) {
     console.error('Database Connection Error:', error);
     throw new Error('Failed to connect to database.');
   }
 }
 
-// possibly use to edit in the art
+// use to edit in the art
 export async function putArt(art_id: string, title: string, description: string, price: number, hero_image_url: string, category_id: number, updated_at: string ) {
   try {
     const result = await sql`

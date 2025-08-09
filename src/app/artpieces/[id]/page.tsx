@@ -29,6 +29,12 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
       notFound();
     }
 
+    // Check if current user is the creator
+    let loggedIn = false;
+    if (currentUser && String(currentUser.id) === String(artpiece.creator_id)) {
+      loggedIn = true;
+    }
+
     // Check if the artpiece is favorited by the current user
     let isFavorited = false;
     if (currentUser) {
@@ -68,6 +74,20 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority
                 />
+              </div>
+
+              {/*Create button */}
+              <div className="flex mt-6 justify-center">
+                {!loggedIn ? (
+                  <></>
+                ) : (
+                <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                  <Link 
+                    href={`/artpieces/${artpiece.id}/edit`}>Edit
+                  </Link>
+                  {/*update href when fullsite available */}
+                </button>
+                )} 
               </div>
             </div>
 
