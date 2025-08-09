@@ -2,8 +2,6 @@
 
 import { getCurrentUser } from '@/lib/session';
 import { sql } from '@/lib/database';
-import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
 
 export async function deleteArtpiece(artpieceId: string) {
   try {

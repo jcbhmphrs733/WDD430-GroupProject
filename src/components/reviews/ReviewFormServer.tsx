@@ -9,7 +9,7 @@ export function ReviewFormServer({ artpieceId, artpieceTitle }: ReviewFormServer
   return (
     <div className="bg-background-200 rounded-lg p-6 border border-background-300">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        Write a Review for "{artpieceTitle}"
+        Write a Review for &quot;{artpieceTitle}&quot;
       </h3>
       
       <form action={submitReviewAndRedirect} className="space-y-4">

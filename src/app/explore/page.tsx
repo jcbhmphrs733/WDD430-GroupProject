@@ -5,9 +5,10 @@ import { SearchForm } from '@/components/forms/SearchForm';
 import { ArtpieceCard } from '@/components/artpieces/ArtpieceCard';
 import { CreatorCard } from '@/components/creators/CreatorCard';
 import { searchArtpiecesAction } from './actions';
+import { Artpiece, Creator } from '@/types';
 
 export default function ExplorePage() {
-  const [searchResults, setSearchResults] = useState<{artpieces: any[], creators: any[]}>({
+  const [searchResults, setSearchResults] = useState<{artpieces: Artpiece[], creators: Creator[]}>({
     artpieces: [],
     creators: []
   });

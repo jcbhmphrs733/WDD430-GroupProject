@@ -23,6 +23,10 @@ export default async function createArt({ params, searchParams }: ProfilePagePro
     const { id } = await params;
     const { error, success, title, description, price, category_id } = await searchParams;
     
+    // Get current user and verify authentication
+    const loggedIn = await getCurrentUser();
+    const user = await getUserById(id);
+    
     // Prepare form data for sticky fields
     const formData = {
         title: title || '',

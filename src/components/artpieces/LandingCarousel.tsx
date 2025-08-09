@@ -13,7 +13,7 @@ interface ArtpieceCarouselProps {
 export function LandingCarousel({ artpieces, className = "", interval = 3000 }: ArtpieceCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardsToShow, setCardsToShow] = useState(3);
-  const [isTransitioning, setIsTransitioning] = useState(true);
+  const [isTransitioning] = useState(true);
 
   // Responsive cards per view
   useEffect(() => {
@@ -41,18 +41,6 @@ export function LandingCarousel({ artpieces, className = "", interval = 3000 }: 
 
   // Adjust starting index to account for duplicated artpieces
     const adjustedIndex = currentIndex + cardsToShow;
-
-    const nextSlide = () => {
-        if (!isTransitioning) return;
-        
-        setCurrentIndex(prev => prev + 1);
-    };
-
-    const prevSlide = () => {
-        if (!isTransitioning) return;
-        
-        setCurrentIndex(prev => prev - 1);
-    };
 
     useEffect(() => {
         const timer = setInterval(() => {

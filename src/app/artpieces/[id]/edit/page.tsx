@@ -1,6 +1,5 @@
 import { EditArt } from "@/components/forms/EditArt";
 import { getCurrentUser } from "@/lib/session";
-import { getUserById, getArtpieceById } from "@/lib/database";
 import { notFound } from "next/navigation";
 import { redirect } from "next/navigation";
 

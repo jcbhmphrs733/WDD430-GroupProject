@@ -55,7 +55,7 @@ export default async function FavoritesPage({ params }: FavoritesPageProps) {
               My Favorites
             </h1>
             <p className="text-gray-600">
-              Artpieces you've saved to your favorites collection
+              Artpieces you&apos;ve saved to your favorites collection
             </p>
           </div>
 

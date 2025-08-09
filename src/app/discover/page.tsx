@@ -1,15 +1,11 @@
-import { getRandomArtpieces, getFeaturedArtpieces, getAllCategories, getAllArtpieces, getAllCreators } from '@/lib/database';
 import { ArtpieceCarousel } from '@/components/artpieces/ArtpieceCarousel';
 import { CreatorCard } from '@/components/creators/CreatorCard';
 import Link from 'next/link';
+import { getAllArtpieces, getAllCategories, getAllCreators } from '@/lib/database';
 
-interface DiscoverPageProps {
-  searchParams: {
-    // No longer used for delete success messages
-  };
-}
 
-export default async function DiscoverPage({ searchParams }: DiscoverPageProps) {
+
+export default async function DiscoverPage({ searchParams: _searchParams }: { searchParams: { category?: string; sort?: string; search?: string; page?: string; } }) {
   try {
     // Fetch data for the page
     const [allArtpieces, categories, allCreators] = await Promise.all([

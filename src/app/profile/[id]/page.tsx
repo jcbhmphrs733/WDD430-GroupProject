@@ -18,7 +18,6 @@ interface ProfilePageProps {
 export default async function ProfilePage({ params, searchParams }: ProfilePageProps) {
   try {
     // Await params and searchParams first
-    let loggedIn = false
     const { id } = await params;
     const { deleted } = await searchParams;
 
@@ -28,10 +27,6 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
       getUserById(id),
       getArtpiecesbyUser(id)
     ]);
-
-    if (currentUser && String(currentUser.id) === id) {
-      loggedIn = true
-    }
 
     if (!user) {
       notFound();
@@ -256,7 +251,7 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
                 No Artpieces Yet
               </h3>
               <p className="text-gray-600">
-                {fullName} hasn't created any artpieces yet.
+                {fullName} hasn&apos;t created any artpieces yet.
               </p>
             </div>
           )}
