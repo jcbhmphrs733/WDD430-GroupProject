@@ -20,8 +20,8 @@ export function AddArt(userId: any){
                 <input id="hero_image_url" name="hero_image_url" type="text" className="block w-full text-text-500 pl-1 rounded-l" required></input>
             
             <label className="mt-3">Category</label>
-            <select id="category_id" name="category_id" className="block text-text-500 w-full pl-1 rounded-l" required defaultValue="-- Select an option --">
-                <option disabled value="">-- Select an option --</option>
+            <select id="category_id" name="category_id" className="block text-text-500 w-full pl-1 rounded-l" required defaultValue="hello">
+                <option disabled value="hello" >-- Select an option --</option>
                 <option value="9">Ceramics</option>
                 <option value="10">Fiber Arts</option>
                 <option value="6">Glass Art</option>

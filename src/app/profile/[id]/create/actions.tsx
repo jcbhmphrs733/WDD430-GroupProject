@@ -17,7 +17,7 @@ export async function addArtpiece(formData: FormData) {
         hero_image_url: ${hero_image_url} category_id: ${category_id}
         creator_id: ${creator_id} created_at: ${created_at} updated_at: ${updated_at}`);
     
-    // await postNewArt(title, description, price, hero_image_url, category_id, creator_id, created_at, updated_at);
+    await postNewArt(title, description, price, hero_image_url, creator_id, category_id, created_at, updated_at);
     // const artId = await postNewArt(title, description, price, hero_image_url, category_id, creator_id, created_at, updated_at);
 
     redirect(`/profile/${creator_id}/`);
