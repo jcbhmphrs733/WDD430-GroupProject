@@ -33,14 +33,9 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link href="/categories" className="text-text-600 hover:text-text-700 transition-colors">
-                                    Categories
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/create" className="text-text-600 hover:text-text-700 transition-colors">
-                                    Create & Share
-                                </Link>
+                                <span className="text-text-400">
+                                    Categories (Coming Soon)
+                                </span>
                             </li>
                         </ul>
                     </div>
@@ -52,19 +47,19 @@ export function Footer() {
                         </h3>
                         <ul className="space-y-2">
                             <li>
-                                <Link href="/help" className="text-text-600 hover:text-text-700 transition-colors">
-                                    Help Center
-                                </Link>
+                                <span className="text-text-400">
+                                    Help Center (Coming Soon)
+                                </span>
                             </li>
                             <li>
-                                <Link href="/contact" className="text-text-600 hover:text-text-700 transition-colors">
-                                    Contact Us
-                                </Link>
+                                <span className="text-text-400">
+                                    Contact Us (Coming Soon)
+                                </span>
                             </li>
                             <li>
-                                <Link href="/privacy" className="text-text-600 hover:text-text-700 transition-colors">
-                                    Privacy Policy
-                                </Link>
+                                <span className="text-text-400">
+                                    Privacy Policy (Coming Soon)
+                                </span>
                             </li>
                         </ul>
                     </div>

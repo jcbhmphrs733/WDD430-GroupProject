@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArtpiecesbyUser, getUserById } from '@/lib/database';
-import { getCurrentUser } from '@/lib/session';
 import { getUserAvatarColor } from '@/lib/utils';
 import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
 import FallbackImage from '@/components/profile/fallbackimage';
@@ -19,18 +18,16 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     let loggedIn = false
     const { id } = await params;
 
-    const currentUser = await getCurrentUser();
-
-    if (currentUser && String(currentUser.id) === id) {
-      loggedIn = true
-    }
-    
     // Get current logged-in user and profile user data
     const [currentUser, user, userArtpieces] = await Promise.all([
       getCurrentUser(),
       getUserById(id),
       getArtpiecesbyUser(id)
     ]);
+
+    if (currentUser && String(currentUser.id) === id) {
+      loggedIn = true
+    }
 
     if (!user) {
       notFound();
