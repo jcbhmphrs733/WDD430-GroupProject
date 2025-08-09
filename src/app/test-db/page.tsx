@@ -65,7 +65,7 @@ export default async function TestDatabase() {
           <h2 className="text-lg font-semibold">Users ({users.length}):</h2>
           <ul className="list-disc list-inside">
             {users.map(user => (
-              <li key={user.id}>{user.first_name}, {user.last_name} | {user.id}</li>
+              <li key={user.id}> {user.first_name}, {user.last_name} | {user.id} | {user.email} </li>
             ))}
           </ul>
         </div>

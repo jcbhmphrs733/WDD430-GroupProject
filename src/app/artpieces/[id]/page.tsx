@@ -1,9 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getArtpieceById, getArtpieceReviews, incrementArtpieceViews } from '@/lib/database';
-import { ReviewSection } from '@/components/reviews/ReviewSection';
+import { getArtpieceById, getArtpieceReviews, incrementArtpieceViews, isArtpieceFavorited } from '@/lib/database';
 import { getCurrentUser } from '@/lib/session';
+import { getUserAvatarColor } from '@/lib/utils';
+import { ReviewSection } from '@/components/reviews/ReviewSection';
+import { FavoriteButton } from '@/components/artpieces/FavoriteButton';
+import { DeleteArtButton } from '@/components/artpieces/DeleteArtButton';
 
 interface ArtpiecePageProps {
   params: {
@@ -16,7 +19,9 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
     // Await params first
     const { id } = await params;
     
-    const [artpiece, reviews] = await Promise.all([
+    // Get current user and artpiece data
+    const [currentUser, artpiece, reviews] = await Promise.all([
+      getCurrentUser(),
       getArtpieceById(id),
       getArtpieceReviews(id)
     ]);
@@ -24,12 +29,17 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
     if (!artpiece) {
       notFound();
     }
-    let loggedIn = false;
-    const currentUser = await getCurrentUser();
 
-    if (currentUser && String(currentUser.id) === String(artpiece.creator_id)) {
-      loggedIn = true;
+    // Check if current user is the creator
+    const isCreator = currentUser && String(currentUser.id) === String(artpiece.creator_id);
+
+    // Check if the artpiece is favorited by the current user
+    let isFavorited = false;
+    if (currentUser) {
+      isFavorited = await isArtpieceFavorited(currentUser.id.toString(), id);
     }
+
+    const creatorAvatarColor = getUserAvatarColor(artpiece.creator_id);
 
     // Increment view count (don't await to avoid blocking page load)
     incrementArtpieceViews(id).catch(console.error);
@@ -64,18 +74,23 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                 />
               </div>
 
-              {/*Create button */}
-              <div className="flex mt-6 justify-center">
-                {!loggedIn ? (
-                  <></>
-                ) : (
-                <Link className="w-1/2 lg:w-full"
-                    href={`/artpieces/${artpiece.id}/edit`}>
-                      <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                        Edit
-                      </button>
-                </Link>
-                )} 
+              {/*Edit and Delete buttons */}
+              <div className="flex mt-6 justify-center space-x-3">
+                {isCreator && (
+                  <>
+                    <Link 
+                      href={`/artpieces/${artpiece.id}/edit`}
+                      className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
+                    >
+                      Edit Artwork
+                    </Link>
+                    <DeleteArtButton 
+                      artpieceId={artpiece.id}
+                      artpieceTitle={artpiece.title}
+                    />
+                  </>
+                )}
+
               </div>
             </div>
 
@@ -91,16 +106,25 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                     href={`/profile/${artpiece.creator_id}`}
                     className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
                   >
-                    {artpiece.creator_profile_image && (
-                      <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                      {artpiece.creator_profile_image ? (
                         <Image
                           src={artpiece.creator_profile_image}
                           alt={artpiece.creator_name}
                           fill
                           className="object-cover"
                         />
-                      </div>
-                    )}
+                      ) : (
+                        <div 
+                          className="w-full h-full flex items-center justify-center"
+                          style={{ backgroundColor: creatorAvatarColor }}
+                        >
+                          <span className="text-white text-xs font-bold drop-shadow-sm">
+                            {artpiece.creator_name?.split(' ')[0]?.[0]?.toUpperCase() || 'U'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                     <div>
                       <p className="text-lg font-medium text-gray-800 hover:text-gray-900">
                         by {artpiece.creator_name}
@@ -188,15 +212,19 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                  Contact Creator
-                </button>
-                <button className="flex-1 bg-background-300 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-background-400 transition-colors border border-background-400">
-                  Add to Favorites ♡
-                </button>
-              </div>
+              {/* Action Buttons - Hidden for creators viewing their own artwork */}
+              {!isCreator && (
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                    Contact Creator
+                  </button>
+                  <FavoriteButton 
+                    artpieceId={id}
+                    initialFavorited={isFavorited}
+                    isLoggedIn={!!currentUser}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -206,6 +234,8 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
               artpieceId={id} 
               reviews={reviews}
               artpieceTitle={artpiece.title}
+              isCreator={isCreator}
+              isLoggedIn={!!currentUser}
             />
           </div>
 

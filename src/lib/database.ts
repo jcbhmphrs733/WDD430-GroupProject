@@ -248,7 +248,7 @@ export async function searchCreators(searchTerm: string) {
 export async function getArtpiecesbyUser(userId: string): Promise<ArtpieceWithDetails[]> {
   try {
     const result = await sql`
-      SELECT * FROM artpieces
+      SELECT * FROM artpieces_with_details
       WHERE creator_id = ${userId}
       ORDER BY created_at desc
     `;      
@@ -298,7 +298,7 @@ export async function getReviewsForArtpiece(artpieceId: string) {
 }
 
 // Favorites-related functions
-export async function getUserFavorites(userId: string) {
+export async function getUserFavorites(userId: string): Promise<ArtpieceWithDetails[]> {
   try {
     const result = await sql`
       SELECT a.* FROM artpieces_with_details a
@@ -306,10 +306,55 @@ export async function getUserFavorites(userId: string) {
       WHERE f.user_id = ${userId}
       ORDER BY f.created_at DESC
     `;
-    return result.rows;
+    return result.rows as ArtpieceWithDetails[];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch user favorites.');
+  }
+}
+
+// Check if an artpiece is favorited by a user
+export async function isArtpieceFavorited(userId: string, artpieceId: string): Promise<boolean> {
+  try {
+    const result = await sql`
+      SELECT id FROM favorites
+      WHERE user_id = ${userId} AND artpiece_id = ${artpieceId}
+    `;
+    return result.rows.length > 0;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to check favorite status.');
+  }
+}
+
+// Add an artpiece to user's favorites
+export async function addToFavorites(userId: string, artpieceId: string) {
+  try {
+    const result = await sql`
+      INSERT INTO favorites (user_id, artpiece_id)
+      VALUES (${userId}, ${artpieceId})
+      ON CONFLICT (user_id, artpiece_id) DO NOTHING
+      RETURNING id
+    `;
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to add to favorites.');
+  }
+}
+
+// Remove an artpiece from user's favorites
+export async function removeFromFavorites(userId: string, artpieceId: string) {
+  try {
+    const result = await sql`
+      DELETE FROM favorites
+      WHERE user_id = ${userId} AND artpiece_id = ${artpieceId}
+      RETURNING id
+    `;
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to remove from favorites.');
   }
 }
 
@@ -381,6 +426,38 @@ export async function getAllCreators(): Promise<Creator[]> {
   }
 }
 
+// Get all users as creators (including those with 0 artpieces) for the creators page
+export async function getAllUsersAsCreators(): Promise<Creator[]> {
+  try {
+    const result = await sql`
+      SELECT 
+        u.id,
+        u.username,
+        u.first_name,
+        u.last_name,
+        u.bio,
+        u.profile_image_url,
+        COALESCE(us.artpieces_count, 0) as artpieces_count,
+        COALESCE(us.total_favorites_received, 0) as total_favorites,
+        COALESCE(us.average_rating, 0) as average_rating,
+        COALESCE(us.total_reviews, 0) as total_reviews,
+        COALESCE(SUM(a.view_count), 0) as total_views
+      FROM users u
+      LEFT JOIN user_stats us ON u.id = us.id
+      LEFT JOIN artpieces a ON u.id = a.creator_id
+      GROUP BY u.id, u.username, u.first_name, u.last_name, u.bio, u.profile_image_url, 
+               us.artpieces_count, us.total_favorites_received, us.average_rating, us.total_reviews
+      ORDER BY COALESCE(us.total_favorites_received, 0) DESC, 
+               COALESCE(us.average_rating, 0) DESC, 
+               COALESCE(us.artpieces_count, 0) DESC
+    `;
+    return result.rows as Creator[];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all users as creators.');
+  }
+}
+
 export async function createUser({
   email,
   username,
@@ -414,15 +491,58 @@ export async function createUser({
   }
 }
 
+// Update user profile
+export async function updateUser(userId: string, {
+  email,
+  username,
+  first_name,
+  last_name,
+  bio,
+  profile_image_url
+}: {
+  email: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  bio?: string | null;
+  profile_image_url?: string | null;
+}) {
+  try {
+    const result = await sql`
+      UPDATE users 
+      SET 
+        email = ${email},
+        username = ${username},
+        first_name = ${first_name},
+        last_name = ${last_name},
+        bio = ${bio},
+        profile_image_url = ${profile_image_url},
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${userId}
+      RETURNING id, email, username, first_name, last_name, bio, profile_image_url, updated_at
+    `;
+    
+    if (result.rows.length === 0) {
+      throw new Error('User not found');
+    }
+    
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error - updateUser:', error);
+    throw new Error('Failed to update user profile.');
+  }
+}
+
 // possibly use to add in the art
 export async function postNewArt(title: string, description: string, price: number, hero_image_url: string, creator_id: string, category_id: number) {
   try {
     const result = await sql`
     INSERT INTO artpieces (title, description, price, hero_image_url, creator_id, category_id, view_count, created_at, updated_at)
-    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${creator_id}, ${category_id}, DEFAULT, DEFAULT, DEFAULT)
+    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${creator_id}, ${category_id}, DEFAULT, ${created_at}, ${updated_at})
+
     RETURNING id;
     `;
-    return result.rows[0];
+    return result.rows[0]?.id;
   } catch(error) {
     console.error('Database Connection Error:', error);
     throw new Error('Failed to connect to database.');
@@ -441,5 +561,32 @@ export async function putArt(art_id: string, title: string, description: string,
   } catch(error) {
     console.error('Database Connection Error:', error);
     throw new Error('Failed to connect to database.');
+  }
+}
+
+// Add a new review
+export async function addReview(artpieceId: string, reviewerId: string, rating: number, comment?: string): Promise<Review> {
+  try {
+    const result = await sql`
+      INSERT INTO reviews (artpiece_id, reviewer_id, rating, comment)
+      VALUES (${artpieceId}, ${reviewerId}, ${rating}, ${comment || null})
+      RETURNING 
+        id,
+        artpiece_id,
+        reviewer_id,
+        rating,
+        comment,
+        created_at,
+        updated_at
+    `;
+    
+    if (result.rows.length === 0) {
+      throw new Error('Failed to create review');
+    }
+    
+    return result.rows[0] as Review;
+  } catch (error) {
+    console.error('Database Connection Error:', error);
+    throw new Error('Failed to add review to database.');
   }
 }

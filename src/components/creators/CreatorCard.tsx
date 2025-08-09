@@ -1,17 +1,25 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
 import { Creator } from '@/types';
+import { getProfileImageUrl, getUserAvatarColor } from '@/lib/utils';
 
 interface CreatorCardProps {
   creator: Creator;
 }
 
 export function CreatorCard({ creator }: CreatorCardProps) {
+  const [imageError, setImageError] = useState(false);
   const fullName = `${creator.first_name} ${creator.last_name}`;
   const artpiecesCount = creator.artpieces_count || 0;
   const avgRating = Number(creator.average_rating) || 0;
   const totalFavorites = creator.total_favorites || 0;
   const totalViews = creator.total_views || 0;
+  const profileImageSrc = getProfileImageUrl(creator.profile_image_url);
+  const isDefaultImage = profileImageSrc === '/images/user-profile-pics/default.jpg';
+  const avatarColor = getUserAvatarColor(creator.id);
 
   return (
     <Link 
@@ -21,22 +29,36 @@ export function CreatorCard({ creator }: CreatorCardProps) {
       <div className="flex items-start space-x-4">
         {/* Profile Image */}
         <div className="flex-shrink-0">
-          {creator.profile_image_url ? (
-            <div className="relative w-16 h-16 rounded-full overflow-hidden">
-              <Image
-                src={creator.profile_image_url}
-                alt={fullName}
-                fill
-                className="object-cover"
-              />
-            </div>
-          ) : (
-            <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
-              <span className="text-gray-600 font-medium text-lg">
-                {creator.first_name?.[0]?.toUpperCase() || creator.username?.[0]?.toUpperCase() || 'U'}
-              </span>
-            </div>
-          )}
+          <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-200">
+            {!imageError ? (
+              isDefaultImage ? (
+                // Use regular img tag for default image to avoid Next.js optimization issues
+                <img
+                  src={profileImageSrc}
+                  alt={fullName}
+                  className="w-full h-full object-cover"
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                <Image
+                  src={profileImageSrc}
+                  alt={fullName}
+                  fill
+                  className="object-cover"
+                  onError={() => setImageError(true)}
+                />
+              )
+            ) : (
+              <div 
+                className="w-full h-full flex items-center justify-center"
+                style={{ backgroundColor: avatarColor }}
+              >
+                <span className="text-white font-medium text-lg drop-shadow-sm">
+                  {creator.first_name?.[0]?.toUpperCase() || creator.username?.[0]?.toUpperCase() || 'U'}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Creator Info */}

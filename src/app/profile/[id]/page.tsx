@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArtpiecesbyUser, getUserById } from '@/lib/database';
+import { getUserAvatarColor } from '@/lib/utils';
 import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
 import FallbackImage from '@/components/profile/fallbackimage';
 import { getCurrentUser } from '@/lib/session';
@@ -17,30 +18,37 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     let loggedIn = false
     const { id } = await params;
 
-    const currentUser = await getCurrentUser();
+    // Get current logged-in user and profile user data
+    const [currentUser, user, userArtpieces] = await Promise.all([
+      getCurrentUser(),
+      getUserById(id),
+      getArtpiecesbyUser(id)
+    ]);
 
     if (currentUser && String(currentUser.id) === id) {
       loggedIn = true
     }
-    
-    const [user, userArtpieces] = await Promise.all([
-      getUserById(id),
-      getArtpiecesbyUser(id)
-    ]);
 
     if (!user) {
       notFound();
     }
 
+    // Check if the current user is viewing their own profile
+    const isOwnProfile = currentUser && currentUser.id.toString() === id;
+
     const shuffledArtpieces = [...userArtpieces].sort(() => Math.random() - 0.5);
     const fullName = `${user.first_name} ${user.last_name}`;
+    const avatarColor = getUserAvatarColor(user.id);
     
     // Calculate user stats
     const totalArtpieces = userArtpieces.length;
     const totalViews = userArtpieces.reduce((sum, art) => sum + (art.view_count || 0), 0);
     const totalFavorites = userArtpieces.reduce((sum, art) => sum + (art.favorite_count || 0), 0);
-    const averageRating = userArtpieces.length > 0 
-      ? userArtpieces.reduce((sum, art) => sum + (art.average_rating || 0), 0) / userArtpieces.length 
+    
+    // Calculate average rating only from artpieces that have reviews
+    const artpiecesWithReviews = userArtpieces.filter(art => (art.review_count || 0) > 0);
+    const averageRating = artpiecesWithReviews.length > 0 
+      ? artpiecesWithReviews.reduce((sum, art) => sum + (art.average_rating || 0), 0) / artpiecesWithReviews.length 
       : 0;
 
     return (
@@ -73,26 +81,17 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                     priority
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                    <span className="text-4xl font-bold text-gray-500">
+                  <div 
+                    className="w-full h-full flex items-center justify-center"
+                    style={{ backgroundColor: avatarColor }}
+                  >
+                    <span className="text-white text-6xl font-bold drop-shadow-lg">
                       {user.first_name?.[0]?.toUpperCase() || user.username?.[0]?.toUpperCase() || 'U'}
                     </span>
                   </div>
                 )}
               </div>
-              {/*Create button */}
-              <div className="flex mt-6 justify-center">
-                {!loggedIn ? (
-                  <></>
-                ) : (
-                   <Link className="w-1/2 lg:w-full"
-                    href={`./${id}/create`}>
-                    <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                      Create
-                    </button>
-                </Link>
-                )}
-              </div>
+
             </div>
 
             {/* Details Section */}
@@ -192,12 +191,34 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3">
-                <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                  Contact Creator
-                </button>
-                <button className="flex-1 bg-background-300 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-background-400 transition-colors border border-background-400">
-                  Follow Creator
-                </button>
+                {isOwnProfile ? (
+                  // Show Edit Profile, Create Artwork, and View Favorites buttons for own profile
+                  <>
+                    <Link 
+                      href={`/profile/${id}/edit`}
+                      className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
+                    >
+                      Edit Profile
+                    </Link>
+                    <Link 
+                      href={`/profile/${id}/create`}
+                      className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors text-center"
+                    >
+                      Create Artwork
+                    </Link>
+                    <Link 
+                      href={`/profile/${id}/favorites`}
+                      className="flex-1 bg-background-300 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-background-400 transition-colors border border-background-400 text-center"
+                    >
+                      View Favorites
+                    </Link>
+                  </>
+                ) : (
+                  // Show only Contact Creator button for other profiles
+                  <button className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                    Contact Creator
+                  </button>
+                )}
               </div>
             </div>
           </div>

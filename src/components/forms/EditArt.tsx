@@ -11,10 +11,6 @@ export async function EditArt(artpieceId: any){
         const oops = <p>There's no art!</p>
         return oops;
     }else{
-        // console.log(artpiece);
-
-
-
         return(
             <form action={updateArtpiece} className="bg-background-700 text-text-600 p-5 text-lg justify-items-center flex flex-col rounded-lg w-1/4" >
                 <label ><p>Title</p>
