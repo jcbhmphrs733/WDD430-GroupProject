@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArtpieceById, getArtpieceReviews, incrementArtpieceViews, isArtpieceFavorited } from '@/lib/database';
 import { getCurrentUser } from '@/lib/session';
+import { getUserAvatarColor } from '@/lib/utils';
 import { ReviewSection } from '@/components/reviews/ReviewSection';
 import { FavoriteButton } from '@/components/artpieces/FavoriteButton';
 
@@ -33,6 +34,8 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
     if (currentUser) {
       isFavorited = await isArtpieceFavorited(currentUser.id.toString(), id);
     }
+
+    const creatorAvatarColor = getUserAvatarColor(artpiece.creator_id);
 
     // Increment view count (don't await to avoid blocking page load)
     incrementArtpieceViews(id).catch(console.error);
@@ -80,16 +83,25 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                     href={`/profile/${artpiece.creator_id}`}
                     className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
                   >
-                    {artpiece.creator_profile_image && (
-                      <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                      {artpiece.creator_profile_image ? (
                         <Image
                           src={artpiece.creator_profile_image}
                           alt={artpiece.creator_name}
                           fill
                           className="object-cover"
                         />
-                      </div>
-                    )}
+                      ) : (
+                        <div 
+                          className="w-full h-full flex items-center justify-center"
+                          style={{ backgroundColor: creatorAvatarColor }}
+                        >
+                          <span className="text-white text-xs font-bold drop-shadow-sm">
+                            {artpiece.creator_name?.split(' ')[0]?.[0]?.toUpperCase() || 'U'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                     <div>
                       <p className="text-lg font-medium text-gray-800 hover:text-gray-900">
                         by {artpiece.creator_name}

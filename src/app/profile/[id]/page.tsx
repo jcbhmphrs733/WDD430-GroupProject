@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArtpiecesbyUser, getUserById } from '@/lib/database';
 import { getCurrentUser } from '@/lib/session';
+import { getUserAvatarColor } from '@/lib/utils';
 import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
 
 interface ProfilePageProps {
@@ -32,6 +33,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
     const shuffledArtpieces = [...userArtpieces].sort(() => Math.random() - 0.5);
     const fullName = `${user.first_name} ${user.last_name}`;
+    const avatarColor = getUserAvatarColor(user.id);
     
     // Calculate user stats
     const totalArtpieces = userArtpieces.length;
@@ -74,8 +76,11 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                     priority
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                    <span className="text-4xl font-bold text-gray-500">
+                  <div 
+                    className="w-full h-full flex items-center justify-center"
+                    style={{ backgroundColor: avatarColor }}
+                  >
+                    <span className="text-white text-6xl font-bold drop-shadow-lg">
                       {user.first_name?.[0]?.toUpperCase() || user.username?.[0]?.toUpperCase() || 'U'}
                     </span>
                   </div>

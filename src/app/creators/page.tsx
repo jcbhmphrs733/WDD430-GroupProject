@@ -1,10 +1,10 @@
 import { CreatorGrid } from '@/components/creators/CreatorsGrid';
-import { getAllCreators } from '@/lib/database';
+import { getAllUsersAsCreators } from '@/lib/database';
 
 export default async function CreatorsPage() {
   try {
-    // Fetch all creators
-    const allCreators = await getAllCreators();
+    // Fetch all users as creators (including those with 0 artpieces)
+    const allCreators = await getAllUsersAsCreators();
 
     return (
       <main className="min-h-screen bg-background-100 py-8">

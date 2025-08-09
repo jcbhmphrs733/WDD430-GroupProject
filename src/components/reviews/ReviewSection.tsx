@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Review } from '@/types';
+import { getUserAvatarColor } from '@/lib/utils';
 import { submitReview } from '@/app/actions/reviews';
 
 interface ReviewSectionProps {
@@ -156,30 +157,36 @@ export function ReviewSection({ artpieceId, reviews, artpieceTitle }: ReviewSect
             <p className="text-gray-600">No reviews yet. Be the first to review this artpiece!</p>
           </div>
         ) : (
-          reviews.map((review) => (
-            <div
-              key={review.id}
-              className="bg-white rounded-lg p-6 border border-background-300 shadow-sm"
-            >
-              {/* Review Header */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center space-x-3">
-                  {review.profile_image_url ? (
+          reviews.map((review) => {
+            const reviewerAvatarColor = getUserAvatarColor(review.reviewer_id);
+            
+            return (
+              <div
+                key={review.id}
+                className="bg-white rounded-lg p-6 border border-background-300 shadow-sm"
+              >
+                {/* Review Header */}
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center space-x-3">
                     <div className="relative w-10 h-10 rounded-full overflow-hidden">
-                      <Image
-                        src={review.profile_image_url}
-                        alt={review.username || 'User'}
-                        fill
-                        className="object-cover"
-                      />
+                      {review.profile_image_url ? (
+                        <Image
+                          src={review.profile_image_url}
+                          alt={review.username || 'User'}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div 
+                          className="w-full h-full flex items-center justify-center"
+                          style={{ backgroundColor: reviewerAvatarColor }}
+                        >
+                          <span className="text-white text-xs font-bold drop-shadow-sm">
+                            {review.first_name?.[0]?.toUpperCase() || review.username?.[0]?.toUpperCase() || 'U'}
+                          </span>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                      <span className="text-gray-600 font-medium">
-                        {(review.first_name?.[0] || review.username?.[0] || 'U').toUpperCase()}
-                      </span>
-                    </div>
-                  )}
                   <div>
                     <p className="font-medium text-gray-900">
                       {review.first_name && review.last_name 
@@ -222,7 +229,8 @@ export function ReviewSection({ artpieceId, reviews, artpieceTitle }: ReviewSect
                 </p>
               )}
             </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>

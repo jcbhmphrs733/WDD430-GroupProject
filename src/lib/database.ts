@@ -428,6 +428,38 @@ export async function getAllCreators(): Promise<Creator[]> {
   }
 }
 
+// Get all users as creators (including those with 0 artpieces) for the creators page
+export async function getAllUsersAsCreators(): Promise<Creator[]> {
+  try {
+    const result = await sql`
+      SELECT 
+        u.id,
+        u.username,
+        u.first_name,
+        u.last_name,
+        u.bio,
+        u.profile_image_url,
+        COALESCE(us.artpieces_count, 0) as artpieces_count,
+        COALESCE(us.total_favorites_received, 0) as total_favorites,
+        COALESCE(us.average_rating, 0) as average_rating,
+        COALESCE(us.total_reviews, 0) as total_reviews,
+        COALESCE(SUM(a.view_count), 0) as total_views
+      FROM users u
+      LEFT JOIN user_stats us ON u.id = us.id
+      LEFT JOIN artpieces a ON u.id = a.creator_id
+      GROUP BY u.id, u.username, u.first_name, u.last_name, u.bio, u.profile_image_url, 
+               us.artpieces_count, us.total_favorites_received, us.average_rating, us.total_reviews
+      ORDER BY COALESCE(us.total_favorites_received, 0) DESC, 
+               COALESCE(us.average_rating, 0) DESC, 
+               COALESCE(us.artpieces_count, 0) DESC
+    `;
+    return result.rows as Creator[];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all users as creators.');
+  }
+}
+
 export async function createUser({
   email,
   username,
