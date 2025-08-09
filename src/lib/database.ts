@@ -538,7 +538,7 @@ export async function postNewArt(title: string, description: string, price: numb
   try {
     const result = await sql`
     INSERT INTO artpieces (title, description, price, hero_image_url, creator_id, category_id, view_count, created_at, updated_at)
-    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${creator_id}, ${category_id}, DEFAULT, ${created_at}, ${updated_at})
+    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${creator_id}, ${category_id}, DEFAULT, DEFAULT, DEFAULT)
 
     RETURNING id;
     `;

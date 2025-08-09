@@ -106,10 +106,8 @@ export async function addArtpiece(formData: FormData) {
       description, 
       price, 
       hero_image_url, 
-      category_id, 
-      creator_id, 
-      created_at, 
-      updated_at
+      creator_id,
+      category_id
     );
 
     console.log('Artpiece created with ID:', artpieceId);
