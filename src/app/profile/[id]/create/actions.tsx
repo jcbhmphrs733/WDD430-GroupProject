@@ -88,8 +88,6 @@ export async function addArtpiece(formData: FormData) {
     const price = parseFloat(formData.get('price')?.toString()?.trim() ?? '0');
     const hero_image_url = formData.get('hero_image_url')?.toString()?.trim() ?? '';
     const category_id = parseInt(formData.get('category_id')?.toString()?.trim() ?? '0');
-    const created_at = formData.get('created_at')?.toString() ?? '';
-    const updated_at = formData.get('updated_at')?.toString() ?? '';
 
     // Attempt to create the artpiece
     console.log('Creating artpiece with data:', {
