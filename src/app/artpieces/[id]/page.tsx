@@ -69,12 +69,12 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                 {!loggedIn ? (
                   <></>
                 ) : (
-                <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                  <Link 
-                    href={`/artpieces/${artpiece.id}/edit`}>Edit
-                  </Link>
-                  {/*update href when fullsite available */}
-                </button>
+                <Link className="w-1/2 lg:w-full"
+                    href={`/artpieces/${artpiece.id}/edit`}>
+                      <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                        Edit
+                      </button>
+                </Link>
                 )} 
               </div>
             </div>

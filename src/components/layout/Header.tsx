@@ -40,12 +40,19 @@ export async function Header() {
             >
               Explore
             </Link>
-            <Link 
-              href="/create" 
-              className="text-text-600 hover:text-text-700 transition-colors font-medium"
-            >
-              Create
-            </Link>
+            <>
+              { !user? (
+                <></>
+              ):(
+                <Link 
+                  href={`/profile/${user.id}/create` }
+                  className="text-text-600 hover:text-text-700 transition-colors font-medium"
+                >
+                  Create
+                </Link>
+              )}
+            </>
+            
           </nav>
 
           {/* Actions */}

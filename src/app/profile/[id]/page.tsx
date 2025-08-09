@@ -85,12 +85,12 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 {!loggedIn ? (
                   <></>
                 ) : (
-                <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                  <Link 
-                    href="/create">Create
-                  </Link>
-                  {/*update href when fullsite available */}
-                </button>
+                   <Link className="w-1/2 lg:w-full"
+                    href={`./${id}/create`}>
+                    <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                      Create
+                    </button>
+                </Link>
                 )}
               </div>
             </div>
