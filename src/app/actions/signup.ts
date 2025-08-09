@@ -9,8 +9,6 @@ export async function signup(formData: FormData) {
   const first_name = formData.get('first_name') as string
   const last_name = formData.get('last_name') as string
   const password = formData.get('password') as string
-  const bio = formData.get('bio') as string
-  const profile_image_url = formData.get('profile_image_url') as string
 
   // WARNING: Storing passwords as plaintext is NOT secure! Only do this for early dev/testing.
   await createUser({

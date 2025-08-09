@@ -2,7 +2,7 @@
 // Create this file: src/app/test-db/page.tsx
 
 import { testConnection, getAllArtpieces, getAllCategories, checkDatabaseStructure, getAllUsers } from '@/lib/database';
-import { ArtpieceWithDetails, Category, DatabaseStructure, User } from '@/types';
+import { ArtpieceWithDetails, DatabaseStructure, User } from '@/types';
 import DeleteAndReseedButton from './DeleteAndReseedButton';
 
 export default async function TestDatabase() {
@@ -24,7 +24,7 @@ export default async function TestDatabase() {
     }
     
     // Test categories (should work since it's a simple table)
-    const categories: Category[] = await getAllCategories();
+    await getAllCategories();
 
     const users: User[] = await getAllUsers();
     

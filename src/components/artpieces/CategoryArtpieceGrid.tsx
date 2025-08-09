@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArtpieceCard } from './ArtpieceCard';
+import type { ArtpieceWithDetails } from '@/types';
 import { fetchArtpiecesByCategory } from './actions';
 
 interface CategoryArtpieceGridProps {
@@ -12,11 +13,11 @@ interface CategoryArtpieceGridProps {
 type SortOption = 'none' | 'price-asc' | 'price-desc';
 
 export function CategoryArtpieceGrid({ categoryName }: CategoryArtpieceGridProps) {
-  const [artpieces, setArtpieces] = useState<any[]>([]);
+  const [artpieces, setArtpieces] = useState<ArtpieceWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>('none');
-  const [sortedArtpieces, setSortedArtpieces] = useState<any[]>([]);
+  const [sortedArtpieces, setSortedArtpieces] = useState<ArtpieceWithDetails[]>([]);
 
   // Fetch artpieces on component mount
   useEffect(() => {
@@ -26,8 +27,8 @@ export function CategoryArtpieceGrid({ categoryName }: CategoryArtpieceGridProps
         const result = await fetchArtpiecesByCategory(categoryName);
         
         if (result.success) {
-          setArtpieces(result.data || []);
-          setSortedArtpieces(result.data || []);
+          setArtpieces((result.data || []) as ArtpieceWithDetails[]);
+          setSortedArtpieces((result.data || []) as ArtpieceWithDetails[]);
         } else {
           setError(result.error || 'Failed to load artpieces');
         }
@@ -50,7 +51,7 @@ export function CategoryArtpieceGrid({ categoryName }: CategoryArtpieceGridProps
   useEffect(() => {
     if (artpieces.length === 0) return;
     
-    let sorted = [...artpieces];
+    const sorted = [...artpieces];
     
     if (sortOption === 'price-asc') {
       sorted.sort((a, b) => Number(a.price) - Number(b.price));
@@ -98,7 +99,7 @@ export function CategoryArtpieceGrid({ categoryName }: CategoryArtpieceGridProps
   return (
     <div className="max-w-3xl mx-auto px-4">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-        Artpieces in "{categoryName}" Category
+        Artpieces in &quot;{categoryName}&quot; Category
       </h2>
       
       {/* Filter Controls */}
@@ -137,7 +138,7 @@ export function CategoryArtpieceGrid({ categoryName }: CategoryArtpieceGridProps
 
       {/* Artpieces Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {sortedArtpieces.map((artpiece: any) => (
+        {sortedArtpieces.map((artpiece: ArtpieceWithDetails) => (
           <ArtpieceCard key={artpiece.id} artpiece={artpiece} />
         ))}
       </div>

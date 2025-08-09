@@ -4,12 +4,12 @@ import { getUserById } from '@/lib/database';
 import { updateProfile } from '@/app/actions/profile';
 
 interface EditProfilePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     error?: string;
-  };
+  }>;
 }
 
 export default async function EditProfilePage({ params, searchParams }: EditProfilePageProps) {

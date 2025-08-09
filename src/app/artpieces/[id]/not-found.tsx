@@ -10,7 +10,7 @@ export default function NotFound() {
             Artpiece Not Found
           </h2>
           <p className="text-gray-600 mb-8">
-            Sorry, we couldn't find the artpiece you're looking for. It may have been removed or the link might be incorrect.
+            Sorry, we could not find the artpiece you are looking for. It may have been removed or the link might be incorrect.
           </p>
           <div className="space-y-3">
             <Link

@@ -5,9 +5,10 @@ import { SearchForm } from '@/components/forms/SearchForm';
 import { ArtpieceCard } from '@/components/artpieces/ArtpieceCard';
 import { CreatorCard } from '@/components/creators/CreatorCard';
 import { searchArtpiecesAction } from './actions';
+import { ArtpieceWithDetails, Creator } from '@/types';
 
 export default function ExplorePage() {
-  const [searchResults, setSearchResults] = useState<{artpieces: any[], creators: any[]}>({
+  const [searchResults, setSearchResults] = useState<{artpieces: ArtpieceWithDetails[], creators: Creator[]}>({
     artpieces: [],
     creators: []
   });
@@ -24,8 +25,8 @@ export default function ExplorePage() {
       const result = await searchArtpiecesAction(query);
       if (result.success) {
         setSearchResults({
-          artpieces: result.artpieces || [],
-          creators: result.creators || []
+          artpieces: (result.artpieces || []).map((row) => row as ArtpieceWithDetails),
+          creators: (result.creators || []).map((row) => row as Creator)
         });
       } else {
         console.error('Search error:', result.error);

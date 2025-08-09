@@ -1,9 +1,9 @@
 import { CategoryArtpieceGrid } from '@/components/artpieces/CategoryArtpieceGrid';
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     category: string;
-  };
+  }>;
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {

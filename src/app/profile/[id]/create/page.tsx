@@ -6,22 +6,26 @@ import { redirect } from "next/navigation";
 
 
 interface ProfilePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     error?: string;
     success?: string;
     title?: string;
     description?: string;
     price?: string;
     category_id?: string;
-  };
+  }>;
 }
 
 export default async function createArt({ params, searchParams }: ProfilePageProps){
     const { id } = await params;
     const { error, success, title, description, price, category_id } = await searchParams;
+    
+    // Get current user and verify authentication
+    const loggedIn = await getCurrentUser();
+    const user = await getUserById(id);
     
     // Prepare form data for sticky fields
     const formData = {

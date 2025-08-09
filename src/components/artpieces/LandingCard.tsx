@@ -1,6 +1,5 @@
 // Artpiece card component for displaying individual artpieces
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArtpieceWithDetails } from '@/types';
 
 interface ArtpieceCardProps {

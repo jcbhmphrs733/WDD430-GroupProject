@@ -109,7 +109,7 @@ export function ProfileImageInput({ defaultValue = '', name, id }: ProfileImageI
               <li><strong>ImageBB:</strong> imgbb.com - Free image hosting</li>
             </ul>
             <p className="mt-2 text-gray-400">
-              Right-click on any uploaded image and select "Copy image address" to get the URL.
+              Right-click on any uploaded image and select &quot;Copy image address&quot; to get the URL.
             </p>
           </div>
         </details>
