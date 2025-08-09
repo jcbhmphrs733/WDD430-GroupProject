@@ -107,6 +107,7 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
                   </div>
                 )}
               </div>
+
             </div>
 
             {/* Details Section */}

@@ -107,6 +107,7 @@ export default async function ArtpiecePage({ params, searchParams }: ArtpiecePag
                     />
                   </>
                 )}
+
               </div>
             </div>
 

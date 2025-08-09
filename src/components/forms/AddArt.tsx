@@ -192,5 +192,6 @@ export function AddArt({ userId, formData }: AddArtProps){
                 </div>
             </form>
         </div>
+
     );
 }

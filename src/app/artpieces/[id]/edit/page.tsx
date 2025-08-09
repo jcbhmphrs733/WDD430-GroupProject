@@ -1,6 +1,8 @@
 import { EditArt } from "@/components/forms/EditArt";
-import { getArtpieceById } from "@/lib/database";
-import { notFound } from 'next/navigation';
+import { getCurrentUser } from "@/lib/session";
+import { getUserById, getArtpieceById } from "@/lib/database";
+import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 interface ArtpieceEditPageProps {
   params: {
@@ -25,6 +27,18 @@ export default async function EditArtPage({ params, searchParams }: ArtpieceEdit
     
     if (!artpiece) {
         notFound();
+    }
+    
+    // Check if user is logged in and is the creator
+    let loggedIn = false;
+    const currentUser = await getCurrentUser();
+
+    if (currentUser && String(currentUser.id) === String(artpiece.creator_id)) {
+        loggedIn = true;
+    }
+    
+    if (!loggedIn) {
+        redirect("/login");
     }
     
     // Prepare form data for sticky fields (use URL params if available, otherwise use artpiece data)
