@@ -10,13 +10,17 @@ interface ProfilePageProps {
   params: {
     id: string;
   };
+  searchParams: {
+    deleted?: string;
+  };
 }
 
-export default async function ProfilePage({ params }: ProfilePageProps) {
+export default async function ProfilePage({ params, searchParams }: ProfilePageProps) {
   try {
-    // Await params first
+    // Await params and searchParams first
     let loggedIn = false
     const { id } = await params;
+    const { deleted } = await searchParams;
 
     // Get current logged-in user and profile user data
     const [currentUser, user, userArtpieces] = await Promise.all([
@@ -66,6 +70,18 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             <span className="mx-2 text-gray-400">/</span>
             <span className="text-gray-900">{fullName}</span>
           </nav>
+
+          {/* Success Message for Deleted Artpiece */}
+          {deleted === 'true' && (
+            <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg text-green-800">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-medium">Artpiece deleted successfully!</span>
+              </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             {/* Profile Image Section */}

@@ -12,12 +12,16 @@ interface ArtpiecePageProps {
   params: {
     id: string;
   };
+  searchParams: {
+    updated?: string;
+  };
 }
 
-export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
+export default async function ArtpiecePage({ params, searchParams }: ArtpiecePageProps) {
   try {
-    // Await params first
+    // Await params and searchParams first
     const { id } = await params;
+    const { updated } = await searchParams;
     
     // Get current user and artpiece data
     const [currentUser, artpiece, reviews] = await Promise.all([
@@ -60,6 +64,18 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
             <span className="text-gray-900">{artpiece.title}</span>
           </nav>
 
+          {/* Success Message for Updated Artpiece */}
+          {updated === 'true' && (
+            <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg text-green-800">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span className="font-medium">Artpiece updated successfully!</span>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Hero Image Section */}
             <div className="order-1">
@@ -87,6 +103,7 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                     <DeleteArtButton 
                       artpieceId={artpiece.id}
                       artpieceTitle={artpiece.title}
+                      creatorId={artpiece.creator_id}
                     />
                   </>
                 )}

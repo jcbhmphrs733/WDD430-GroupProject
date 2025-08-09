@@ -8,9 +8,10 @@ import { deleteArtpiece } from '@/app/actions/deleteArtpiece';
 interface DeleteArtButtonProps {
   artpieceId: string;
   artpieceTitle: string;
+  creatorId: string;
 }
 
-export function DeleteArtButton({ artpieceId, artpieceTitle }: DeleteArtButtonProps) {
+export function DeleteArtButton({ artpieceId, artpieceTitle, creatorId }: DeleteArtButtonProps) {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,8 +30,8 @@ export function DeleteArtButton({ artpieceId, artpieceTitle }: DeleteArtButtonPr
       const result = await deleteArtpiece(artpieceId);
       
       if (result.success) {
-        // Redirect to discover page after successful deletion
-        router.push('/discover?deleted=true');
+        // Redirect to user's profile page after successful deletion
+        router.push(`/profile/${creatorId}?deleted=true`);
       } else {
         setError(result.message);
         setIsDeleting(false);
