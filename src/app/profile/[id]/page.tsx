@@ -91,19 +91,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                   </div>
                 )}
               </div>
-              {/*Create button */}
-              <div className="flex mt-6 justify-center">
-                {!loggedIn ? (
-                  <></>
-                ) : (
-                <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                  <Link 
-                    href="/create">Create
-                  </Link>
-                  {/*update href when fullsite available */}
-                </button>
-                )}
-              </div>
             </div>
 
             {/* Details Section */}
@@ -204,13 +191,19 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3">
                 {isOwnProfile ? (
-                  // Show Edit Profile and View Favorites buttons for own profile
+                  // Show Edit Profile, Create Artwork, and View Favorites buttons for own profile
                   <>
                     <Link 
                       href={`/profile/${id}/edit`}
                       className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
                     >
                       Edit Profile
+                    </Link>
+                    <Link 
+                      href={`/profile/${id}/create`}
+                      className="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors text-center"
+                    >
+                      Create Artwork
                     </Link>
                     <Link 
                       href={`/profile/${id}/favorites`}
