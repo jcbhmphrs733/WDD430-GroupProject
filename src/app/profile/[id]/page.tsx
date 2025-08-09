@@ -37,8 +37,11 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     const totalArtpieces = userArtpieces.length;
     const totalViews = userArtpieces.reduce((sum, art) => sum + (art.view_count || 0), 0);
     const totalFavorites = userArtpieces.reduce((sum, art) => sum + (art.favorite_count || 0), 0);
-    const averageRating = userArtpieces.length > 0 
-      ? userArtpieces.reduce((sum, art) => sum + (art.average_rating || 0), 0) / userArtpieces.length 
+    
+    // Calculate average rating only from artpieces that have reviews
+    const artpiecesWithReviews = userArtpieces.filter(art => (art.review_count || 0) > 0);
+    const averageRating = artpiecesWithReviews.length > 0 
+      ? artpiecesWithReviews.reduce((sum, art) => sum + (art.average_rating || 0), 0) / artpiecesWithReviews.length 
       : 0;
 
     return (
@@ -194,15 +197,10 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                     </Link>
                   </>
                 ) : (
-                  // Show Contact Creator and Follow Creator buttons for other profiles
-                  <>
-                    <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                      Contact Creator
-                    </button>
-                    <button className="flex-1 bg-background-300 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-background-400 transition-colors border border-background-400">
-                      Follow Creator
-                    </button>
-                  </>
+                  // Show only Contact Creator button for other profiles
+                  <button className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                    Contact Creator
+                  </button>
                 )}
               </div>
             </div>

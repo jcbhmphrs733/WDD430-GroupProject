@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { addToFavorites, removeFromFavorites } from '@/lib/database';
+import { addToFavorites, removeFromFavorites, getArtpieceById } from '@/lib/database';
 import { getCurrentUser } from '@/lib/session';
 
 export async function toggleFavorite(artpieceId: string, currentlyFavorited: boolean) {
@@ -22,8 +22,16 @@ export async function toggleFavorite(artpieceId: string, currentlyFavorited: boo
       await addToFavorites(userId, artpieceId);
     }
 
+    // Get the artpiece to find the creator ID for revalidation
+    const artpiece = await getArtpieceById(artpieceId);
+
     // Revalidate the artpiece page to update the favorite status
     revalidatePath(`/artpieces/${artpieceId}`);
+    
+    // Also revalidate the creator's profile page to update their total favorites
+    if (artpiece) {
+      revalidatePath(`/profile/${artpiece.creator_id}`);
+    }
     
     // Return success response
     return { 

@@ -248,7 +248,7 @@ export async function searchCreators(searchTerm: string) {
 export async function getArtpiecesbyUser(userId: string): Promise<ArtpieceWithDetails[]> {
   try {
     const result = await sql`
-      SELECT * FROM artpieces
+      SELECT * FROM artpieces_with_details
       WHERE creator_id = ${userId}
       ORDER BY created_at desc
     `;
@@ -458,6 +458,48 @@ export async function createUser({
   } catch (error) {
     console.error('Database Error - createUser:', error);
     throw error;
+  }
+}
+
+// Update user profile
+export async function updateUser(userId: string, {
+  email,
+  username,
+  first_name,
+  last_name,
+  bio,
+  profile_image_url
+}: {
+  email: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  bio?: string | null;
+  profile_image_url?: string | null;
+}) {
+  try {
+    const result = await sql`
+      UPDATE users 
+      SET 
+        email = ${email},
+        username = ${username},
+        first_name = ${first_name},
+        last_name = ${last_name},
+        bio = ${bio},
+        profile_image_url = ${profile_image_url},
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${userId}
+      RETURNING id, email, username, first_name, last_name, bio, profile_image_url, updated_at
+    `;
+    
+    if (result.rows.length === 0) {
+      throw new Error('User not found');
+    }
+    
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error - updateUser:', error);
+    throw new Error('Failed to update user profile.');
   }
 }
 

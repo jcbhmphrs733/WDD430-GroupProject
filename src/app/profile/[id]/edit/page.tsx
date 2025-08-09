@@ -1,16 +1,21 @@
 import { notFound, redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/session';
 import { getUserById } from '@/lib/database';
+import { updateProfile } from '@/app/actions/profile';
 
 interface EditProfilePageProps {
   params: {
     id: string;
   };
+  searchParams: {
+    error?: string;
+  };
 }
 
-export default async function EditProfilePage({ params }: EditProfilePageProps) {
+export default async function EditProfilePage({ params, searchParams }: EditProfilePageProps) {
   try {
     const { id } = await params;
+    const { error } = await searchParams;
     const currentUser = await getCurrentUser();
     
     // Check if user is logged in
@@ -35,8 +40,19 @@ export default async function EditProfilePage({ params }: EditProfilePageProps) 
             Edit Profile
           </h1>
           
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-100 border border-red-300 text-red-800 rounded-lg">
+              <p className="font-medium">Error updating profile:</p>
+              <p>{decodeURIComponent(error)}</p>
+            </div>
+          )}
+          
           <div className="bg-white rounded-lg shadow-sm border border-background-300 p-6">
-            <form className="space-y-6">
+            <form action={updateProfile} className="space-y-6">
+              {/* Hidden field to pass user ID */}
+              <input type="hidden" name="userId" value={id} />
+              
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -107,16 +123,20 @@ export default async function EditProfilePage({ params }: EditProfilePageProps) 
               
               <div>
                 <label htmlFor="profile_image_url" className="block text-sm font-medium text-gray-700 mb-2">
-                  Profile Image URL
+                  Profile Image Path
                 </label>
                 <input
-                  type="url"
+                  type="text"
                   id="profile_image_url"
                   name="profile_image_url"
-                  defaultValue={user.profile_image_url || ''}
+                  defaultValue={user.profile_image_url || `/images/user-profile-pics/${user.username}.jpg`}
                   className="w-full px-3 py-2 border border-background-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  placeholder="https://example.com/your-image.jpg"
+                  placeholder={`/images/user-profile-pics/${user.username}.jpg`}
                 />
+                <div className="text-xs text-gray-500 mt-2">
+                  <p>Enter the path to your profile image file.</p>
+                  <p className="font-medium">Default format: <code className="bg-gray-100 px-1 rounded">/images/user-profile-pics/{user.username}.jpg</code></p>
+                </div>
               </div>
               
               <div className="flex gap-3 pt-4">
