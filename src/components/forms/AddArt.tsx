@@ -5,12 +5,39 @@ import { addArtpiece } from "@/app/profile/[id]/create/actions";
 
 interface AddArtProps {
     userId: string;
+    formData?: {
+        title: string;
+        description: string;
+        price: string;
+        category_id: string;
+    };
 }
 
-export function AddArt({ userId }: AddArtProps){
-    const [title, setTitle] = useState('');
+export function AddArt({ userId, formData }: AddArtProps){
+    const [title, setTitle] = useState(formData?.title || '');
+    const [description, setDescription] = useState(formData?.description || '');
+    const [price, setPrice] = useState(formData?.price || '');
+    const [categoryId, setCategoryId] = useState(formData?.category_id || '');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const timestamp: string = new Date().toISOString();
+    
+    // Function to create a URL-friendly slug from the title
+    const createSlug = (text: string): string => {
+        return text
+            .toLowerCase()
+            .trim()
+            .replace(/[^\w\s-]/g, '') // Remove special characters except spaces and hyphens
+            .replace(/\s+/g, '-') // Replace spaces with hyphens
+            .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+            .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
+    };
+    
+    // Generate the image path based on title
+    const generateImagePath = (titleText: string): string => {
+        if (!titleText.trim()) return '';
+        const slug = createSlug(titleText);
+        return `/images/artpieces/${slug}.jpg`;
+    };
     
     const handleSubmit = async (formData: FormData) => {
         setIsSubmitting(true);
@@ -55,6 +82,8 @@ export function AddArt({ userId }: AddArtProps){
                         id="description" 
                         name="description" 
                         rows={4}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent resize-none" 
                         placeholder="Describe your artwork, materials used, inspiration, etc."
                         required
@@ -62,7 +91,7 @@ export function AddArt({ userId }: AddArtProps){
                         maxLength={1000}
                     />
                     <div className="text-xs text-gray-500 mt-1">
-                        Minimum 10 characters, maximum 1000 characters
+                        {description.length}/1000 characters (minimum 10)
                     </div>
                 </div>
 
@@ -80,6 +109,8 @@ export function AddArt({ userId }: AddArtProps){
                             step="0.01"
                             min="0"
                             max="10000"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
                             className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
                             placeholder="0.00"
                             required
@@ -99,13 +130,14 @@ export function AddArt({ userId }: AddArtProps){
                         id="hero_image_url" 
                         name="hero_image_url" 
                         type="text" 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
-                        placeholder="/images/artpieces/your-artwork.jpg"
+                        value={generateImagePath(title)}
+                        readOnly
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
+                        placeholder="/images/artpieces/your-artwork-title.jpg"
                         required
-                        pattern="^/images/.*"
                     />
                     <div className="text-xs text-gray-500 mt-1">
-                        Must start with "/images/" - e.g., /images/artpieces/my-artwork.jpg
+                        Image path is automatically generated based on your artwork title. Make sure you have uploaded an image with this exact filename.
                     </div>
                 </div>
             
@@ -117,9 +149,10 @@ export function AddArt({ userId }: AddArtProps){
                     <select 
                         id="category_id" 
                         name="category_id" 
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
-                        required 
-                        defaultValue=""
+                        required
                     >
                         <option disabled value="">-- Select a category --</option>
                         <option value="9">Ceramics</option>

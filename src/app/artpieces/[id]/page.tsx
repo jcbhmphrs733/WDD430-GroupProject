@@ -30,10 +30,7 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
     }
 
     // Check if current user is the creator
-    let loggedIn = false;
-    if (currentUser && String(currentUser.id) === String(artpiece.creator_id)) {
-      loggedIn = true;
-    }
+    const isCreator = currentUser && String(currentUser.id) === String(artpiece.creator_id);
 
     // Check if the artpiece is favorited by the current user
     let isFavorited = false;
@@ -76,18 +73,16 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                 />
               </div>
 
-              {/*Create button */}
+              {/*Edit button */}
               <div className="flex mt-6 justify-center">
-                {!loggedIn ? (
-                  <></>
-                ) : (
-                <button className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                {isCreator && (
                   <Link 
-                    href={`/artpieces/${artpiece.id}/edit`}>Edit
+                    href={`/artpieces/${artpiece.id}/edit`}
+                    className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
+                  >
+                    Edit Artwork
                   </Link>
-                  {/*update href when fullsite available */}
-                </button>
-                )} 
+                )}
               </div>
             </div>
 
@@ -209,17 +204,19 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
-                  Contact Creator
-                </button>
-                <FavoriteButton 
-                  artpieceId={id}
-                  initialFavorited={isFavorited}
-                  isLoggedIn={!!currentUser}
-                />
-              </div>
+              {/* Action Buttons - Hidden for creators viewing their own artwork */}
+              {!isCreator && (
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+                    Contact Creator
+                  </button>
+                  <FavoriteButton 
+                    artpieceId={id}
+                    initialFavorited={isFavorited}
+                    isLoggedIn={!!currentUser}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -229,6 +226,8 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
               artpieceId={id} 
               reviews={reviews}
               artpieceTitle={artpiece.title}
+              isCreator={isCreator}
+              isLoggedIn={!!currentUser}
             />
           </div>
 

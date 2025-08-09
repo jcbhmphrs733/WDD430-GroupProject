@@ -10,9 +10,11 @@ interface ReviewSectionProps {
   artpieceId: string;
   reviews: Review[];
   artpieceTitle: string;
+  isCreator: boolean | null;
+  isLoggedIn: boolean;
 }
 
-export function ReviewSection({ artpieceId, reviews, artpieceTitle }: ReviewSectionProps) {
+export function ReviewSection({ artpieceId, reviews, artpieceTitle, isCreator, isLoggedIn }: ReviewSectionProps) {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
@@ -61,12 +63,14 @@ export function ReviewSection({ artpieceId, reviews, artpieceTitle }: ReviewSect
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
           Reviews ({reviews.length})
         </h2>
-        <button
-          onClick={() => setShowReviewForm(!showReviewForm)}
-          className="bg-gray-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm"
-        >
-          {showReviewForm ? 'Cancel' : 'Write Review'}
-        </button>
+        {isLoggedIn && !isCreator && (
+          <button
+            onClick={() => setShowReviewForm(!showReviewForm)}
+            className="bg-gray-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors text-sm"
+          >
+            {showReviewForm ? 'Cancel' : 'Write Review'}
+          </button>
+        )}
       </div>
 
       {/* Review Form */}

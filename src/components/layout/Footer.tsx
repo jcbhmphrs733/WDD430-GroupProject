@@ -33,9 +33,9 @@ export function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <span className="text-text-400">
-                                    Categories (Coming Soon)
-                                </span>
+                                <Link href="/discover" className="text-text-600 hover:text-text-700 transition-colors">
+                                    Discover New Crafts
+                                </Link>
                             </li>
                         </ul>
                     </div>

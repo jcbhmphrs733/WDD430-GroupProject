@@ -538,10 +538,10 @@ export async function postNewArt(title: string, description: string, price: numb
   try {
     const result = await sql`
     INSERT INTO artpieces (title, description, price, hero_image_url, creator_id, category_id, view_count, created_at, updated_at)
-    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${creator_id}, ${category_id}, DEFAULT, ${created_at}, ${updated_at},)
+    VALUES (${title}, ${description}, ${price}, ${hero_image_url}, ${creator_id}, ${category_id}, DEFAULT, ${created_at}, ${updated_at})
     RETURNING id;
     `;
-    return result.rows[0];
+    return result.rows[0]?.id;
   } catch(error) {
     console.error('Database Connection Error:', error);
     throw new Error('Failed to connect to database.');

@@ -7,12 +7,24 @@ interface ProfilePageProps {
   searchParams: {
     error?: string;
     success?: string;
+    title?: string;
+    description?: string;
+    price?: string;
+    category_id?: string;
   };
 }
 
 export default async function createArt({ params, searchParams }: ProfilePageProps){
     const { id } = await params;
-    const { error, success } = await searchParams;
+    const { error, success, title, description, price, category_id } = await searchParams;
+    
+    // Prepare form data for sticky fields
+    const formData = {
+        title: title || '',
+        description: description || '',
+        price: price || '',
+        category_id: category_id || ''
+    };
     
     return (
         <div className="min-h-screen bg-background-100">
@@ -38,7 +50,7 @@ export default async function createArt({ params, searchParams }: ProfilePagePro
                 )}
                 
                 <div className="flex justify-center">
-                    <AddArt userId={id}/>
+                    <AddArt userId={id} formData={formData} />
                 </div>
             </div>
         </div>

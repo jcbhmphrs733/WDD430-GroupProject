@@ -52,8 +52,10 @@ function validateFormData(formData: FormData): ValidationError[] {
   // Validate image URL
   if (!hero_image_url) {
     errors.push({ field: 'hero_image_url', message: 'Image URL is required' });
-  } else if (!hero_image_url.startsWith('/images/')) {
-    errors.push({ field: 'hero_image_url', message: 'Image URL must start with /images/' });
+  } else if (!hero_image_url.startsWith('/images/artpieces/')) {
+    errors.push({ field: 'hero_image_url', message: 'Image URL must start with /images/artpieces/' });
+  } else if (!hero_image_url.endsWith('.jpg') && !hero_image_url.endsWith('.jpeg') && !hero_image_url.endsWith('.png')) {
+    errors.push({ field: 'hero_image_url', message: 'Image URL must end with .jpg, .jpeg, or .png' });
   }
 
   // Validate category
@@ -70,14 +72,14 @@ function validateFormData(formData: FormData): ValidationError[] {
 }
 
 export async function addArtpiece(formData: FormData) {
+  const creator_id = formData.get('creator_id')?.toString() ?? '';
+  
   try {
     // Validate form data
     const validationErrors = validateFormData(formData);
     if (validationErrors.length > 0) {
       const errorMessages = validationErrors.map(err => `${err.field}: ${err.message}`).join('; ');
-      const creator_id = formData.get('creator_id')?.toString() ?? '';
       redirect(`/profile/${creator_id}/create?error=${encodeURIComponent(errorMessages)}`);
-      return;
     }
 
     // Extract validated data
@@ -86,11 +88,19 @@ export async function addArtpiece(formData: FormData) {
     const price = parseFloat(formData.get('price')?.toString()?.trim() ?? '0');
     const hero_image_url = formData.get('hero_image_url')?.toString()?.trim() ?? '';
     const category_id = parseInt(formData.get('category_id')?.toString()?.trim() ?? '0');
-    const creator_id = formData.get('creator_id')?.toString() ?? '';
     const created_at = formData.get('created_at')?.toString() ?? '';
     const updated_at = formData.get('updated_at')?.toString() ?? '';
 
     // Attempt to create the artpiece
+    console.log('Creating artpiece with data:', {
+      title, 
+      description: description.substring(0, 50) + '...', 
+      price, 
+      hero_image_url, 
+      category_id, 
+      creator_id
+    });
+
     const artpieceId = await postNewArt(
       title, 
       description, 
@@ -102,6 +112,8 @@ export async function addArtpiece(formData: FormData) {
       updated_at
     );
 
+    console.log('Artpiece created with ID:', artpieceId);
+
     // Redirect to the new artpiece or profile on success
     if (artpieceId) {
       redirect(`/artpieces/${artpieceId}`);
@@ -110,9 +122,24 @@ export async function addArtpiece(formData: FormData) {
     }
 
   } catch (error) {
+    // Check if this is a Next.js redirect
+    if (error && typeof error === 'object' && 'digest' in error && 
+        typeof error.digest === 'string' && error.digest.includes('NEXT_REDIRECT')) {
+      // Re-throw redirect errors so they work properly
+      throw error;
+    }
+    
     console.error('Error creating artpiece:', error);
-    const creator_id = formData.get('creator_id')?.toString() ?? '';
     const errorMessage = error instanceof Error ? error.message : 'Failed to create artpiece. Please try again.';
-    redirect(`/profile/${creator_id}/create?error=${encodeURIComponent(errorMessage)}`);
+    
+    // Preserve form data in URL for sticky fields
+    const formDataParams = new URLSearchParams();
+    formDataParams.set('title', formData.get('title')?.toString() ?? '');
+    formDataParams.set('description', formData.get('description')?.toString() ?? '');
+    formDataParams.set('price', formData.get('price')?.toString() ?? '');
+    formDataParams.set('category_id', formData.get('category_id')?.toString() ?? '');
+    formDataParams.set('error', errorMessage);
+    
+    redirect(`/profile/${creator_id}/create?${formDataParams.toString()}`);
   }
 }
