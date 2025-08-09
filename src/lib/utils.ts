@@ -41,10 +41,45 @@ export function getProfileImageUrl(profileImageUrl: string | null | undefined): 
 }
 
 export function getUserAvatarColor(userId: number | string): string {
-  // Generate consistent hue based on user ID using golden angle
-  const numericId = typeof userId === 'string' ? parseInt(userId) || 0 : userId;
-  const hue = (numericId * 137.508) % 360; // Golden angle for good distribution
+  // Predefined palette of well-distributed, vibrant colors
+  const colorPalette = [
+    '#E53E3E', // Red
+    '#D53F8C', // Pink  
+    '#9F7AEA', // Purple
+    '#667EEA', // Blue
+    '#4299E1', // Light Blue
+    '#0BC5EA', // Cyan
+    '#00B5A5', // Teal
+    '#38A169', // Green
+    '#68D391', // Light Green
+    '#D69E2E', // Yellow
+    '#ED8936', // Orange
+    '#F56500', // Dark Orange
+    '#E53E3E', // Red (different shade)
+    '#C53030', // Dark Red
+    '#B83280', // Dark Pink
+    '#805AD5', // Dark Purple
+    '#5A67D8', // Dark Blue
+    '#3182CE', // Medium Blue
+    '#0987A0', // Dark Cyan
+    '#319795', // Dark Teal
+    '#2F855A', // Dark Green
+    '#38A169', // Medium Green
+    '#B7791F', // Dark Yellow
+    '#C05621', // Dark Orange
+  ];
   
-  // Return HSL color with fixed saturation and lightness for consistency
-  return `hsl(${Math.round(hue)}, 65%, 75%)`;
+  // Convert userId to a consistent index
+  const str = String(userId);
+  let hash = 0;
+  
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  
+  // Use absolute value and modulo to get a palette index
+  const colorIndex = Math.abs(hash) % colorPalette.length;
+  return colorPalette[colorIndex];
 }
