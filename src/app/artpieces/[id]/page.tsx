@@ -6,6 +6,7 @@ import { getCurrentUser } from '@/lib/session';
 import { getUserAvatarColor } from '@/lib/utils';
 import { ReviewSection } from '@/components/reviews/ReviewSection';
 import { FavoriteButton } from '@/components/artpieces/FavoriteButton';
+import { DeleteArtButton } from '@/components/artpieces/DeleteArtButton';
 
 interface ArtpiecePageProps {
   params: {
@@ -73,15 +74,21 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                 />
               </div>
 
-              {/*Edit button */}
-              <div className="flex mt-6 justify-center">
+              {/*Edit and Delete buttons */}
+              <div className="flex mt-6 justify-center space-x-3">
                 {isCreator && (
-                  <Link 
-                    href={`/artpieces/${artpiece.id}/edit`}
-                    className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
-                  >
-                    Edit Artwork
-                  </Link>
+                  <>
+                    <Link 
+                      href={`/artpieces/${artpiece.id}/edit`}
+                      className="w-1/2 lg:w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
+                    >
+                      Edit Artwork
+                    </Link>
+                    <DeleteArtButton 
+                      artpieceId={artpiece.id}
+                      artpieceTitle={artpiece.title}
+                    />
+                  </>
                 )}
               </div>
             </div>
