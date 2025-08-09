@@ -44,6 +44,7 @@ export async function Header() {
               {user && (
                 <Link 
                   href={`/profile/${user.id}/create`} 
+
                   className="text-text-600 hover:text-text-700 transition-colors font-medium"
                 >
                   Create
@@ -60,6 +61,7 @@ export async function Header() {
                 Welcome {userDetails.first_name} {userDetails.last_name}!
               </div>
             )}
+
 
             {/* Actions */}
             <div className="flex items-center space-x-4">

@@ -90,6 +90,7 @@ export default async function ArtpiecePage({ params }: ArtpiecePageProps) {
                     />
                   </>
                 )}
+
               </div>
             </div>
 

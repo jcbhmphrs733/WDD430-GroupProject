@@ -91,6 +91,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                   </div>
                 )}
               </div>
+
             </div>
 
             {/* Details Section */}

@@ -1,4 +1,9 @@
 import { AddArt } from "@/components/forms/AddArt";
+import { getCurrentUser } from "@/lib/session";
+import { getUserById } from "@/lib/database";
+import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
+
 
 interface ProfilePageProps {
   params: {
@@ -25,7 +30,14 @@ export default async function createArt({ params, searchParams }: ProfilePagePro
         price: price || '',
         category_id: category_id || ''
     };
+
     
+        if (!user) {
+          notFound();
+        }
+  if (!loggedIn){
+    redirect("/login");
+  }else{
     return (
         <div className="min-h-screen bg-background-100">
             <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8">
@@ -52,7 +64,9 @@ export default async function createArt({ params, searchParams }: ProfilePagePro
                 <div className="flex justify-center">
                     <AddArt userId={id} formData={formData} />
                 </div>
+
             </div>
         </div>
     );
+  } 
 }

@@ -142,4 +142,5 @@ export async function addArtpiece(formData: FormData) {
     
     redirect(`/profile/${creator_id}/create?${formDataParams.toString()}`);
   }
+
 }
