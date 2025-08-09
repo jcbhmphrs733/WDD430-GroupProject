@@ -5,9 +5,9 @@ import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
 import Link from 'next/link';
 
 interface FavoritesPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function FavoritesPage({ params }: FavoritesPageProps) {

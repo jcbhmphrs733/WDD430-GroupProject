@@ -9,12 +9,12 @@ import { FavoriteButton } from '@/components/artpieces/FavoriteButton';
 import { DeleteArtButton } from '@/components/artpieces/DeleteArtButton';
 
 interface ArtpiecePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     updated?: string;
-  };
+  }>;
 }
 
 export default async function ArtpiecePage({ params, searchParams }: ArtpiecePageProps) {

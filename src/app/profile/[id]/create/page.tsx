@@ -6,17 +6,17 @@ import { redirect } from "next/navigation";
 
 
 interface ProfilePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     error?: string;
     success?: string;
     title?: string;
     description?: string;
     price?: string;
     category_id?: string;
-  };
+  }>;
 }
 
 export default async function createArt({ params, searchParams }: ProfilePageProps){

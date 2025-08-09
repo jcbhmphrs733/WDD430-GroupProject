@@ -2,19 +2,20 @@ import { EditArt } from "@/components/forms/EditArt";
 import { getCurrentUser } from "@/lib/session";
 import { notFound } from "next/navigation";
 import { redirect } from "next/navigation";
+import { getArtpieceById } from "@/lib/database";
 
 interface ArtpieceEditPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     error?: string;
     success?: string;
     title?: string;
     description?: string;
     price?: string;
     category_id?: string;
-  };
+  }>;
 }
 
 export default async function EditArtPage({ params, searchParams }: ArtpieceEditPageProps){

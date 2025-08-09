@@ -5,7 +5,7 @@ import { getAllArtpieces, getAllCategories, getAllCreators } from '@/lib/databas
 
 
 
-export default async function DiscoverPage({ searchParams: _searchParams }: { searchParams: { category?: string; sort?: string; search?: string; page?: string; } }) {
+export default async function DiscoverPage({ searchParams: _searchParams }: { searchParams: Promise<{ category?: string; sort?: string; search?: string; page?: string; }> }) {
   try {
     // Fetch data for the page
     const [allArtpieces, categories, allCreators] = await Promise.all([

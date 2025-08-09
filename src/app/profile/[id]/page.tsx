@@ -7,12 +7,12 @@ import FallbackImage from '@/components/profile/fallbackimage';
 import { getCurrentUser } from '@/lib/session';
 
 interface ProfilePageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     deleted?: string;
-  };
+  }>;
 }
 
 export default async function ProfilePage({ params, searchParams }: ProfilePageProps) {
