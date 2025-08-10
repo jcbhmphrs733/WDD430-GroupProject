@@ -1,7 +1,6 @@
 // Header component for Handcrafted Haven
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '@/components/ui/Button';
 import { getCurrentUser, getCurrentUserDetails } from '@/lib/session';
 
 export async function Header() {
@@ -57,7 +56,7 @@ export async function Header() {
           <div className="flex items-center space-x-6">
             {/* Welcome Message - Discrete */}
             {userDetails && (
-              <div className="hidden xl:block text-xs text-white/70 italic font-light whitespace-nowrap">
+              <div className="hidden md:block text-sm text-white font-medium whitespace-nowrap">
                 Welcome {userDetails.first_name} {userDetails.last_name}!
               </div>
             )}
@@ -67,21 +66,33 @@ export async function Header() {
             <div className="flex items-center space-x-4">
             {!user ? (
               <>
-                <Button variant="secondary" size="sm">
-                  <Link href="/login">Login</Link>
-                </Button>
-                <Button variant="secondary" size="sm">
-                  <Link href="/signup">Sign Up</Link>
-                </Button>
+                <Link 
+                  href="/login"
+                  className="h-8 px-3 text-sm bg-info-500 text-background-100 hover:bg-info-400 shadow-sm hover:shadow-md rounded-lg transition-all duration-200 flex items-center justify-center font-medium focus:outline-none"
+                >
+                  Login
+                </Link>
+                <Link 
+                  href="/signup"
+                  className="h-8 px-3 text-sm bg-info-500 text-background-100 hover:bg-info-400 shadow-sm hover:shadow-md rounded-lg transition-all duration-200 flex items-center justify-center font-medium focus:outline-none"
+                >
+                  Sign Up
+                </Link>
               </>
             ) : (
               <>
-                <Button variant="secondary" size="sm">
-                  <Link href="/logout">Logout</Link>
-                </Button>
-                <Button variant="secondary" size="sm">
-                  <Link href={`/profile/${user.id}`}>Profile</Link>
-                </Button>
+                <Link 
+                  href="/logout"
+                  className="h-8 px-3 text-sm bg-info-500 text-background-100 hover:bg-info-400 shadow-sm hover:shadow-md rounded-lg transition-all duration-200 flex items-center justify-center font-medium focus:outline-none"
+                >
+                  Logout
+                </Link>
+                <Link 
+                  href={`/profile/${user.id}`}
+                  className="h-8 px-3 text-sm bg-info-500 text-background-100 hover:bg-info-400 shadow-sm hover:shadow-md rounded-lg transition-all duration-200 flex items-center justify-center font-medium focus:outline-none"
+                >
+                  Profile
+                </Link>
               </>
             )}
             </div>

@@ -156,13 +156,16 @@ export function AddArt({ userId, formData }: AddArtProps){
                     >
                         <option disabled value="">-- Select a category --</option>
                         <option value="9">Ceramics</option>
+                        <option value="14">Digital Art</option>
                         <option value="10">Fiber Arts</option>
                         <option value="6">Glass Art</option>
+                        <option value="15">Home Decor</option>
                         <option value="4">Jewelry</option>
                         <option value="5">Metalwork</option>
                         <option value="12">Mixed Media</option>
-                        <option value="13">Other</option>
+                        <option value="16">Other</option>
                         <option value="7">Painting</option>
+                        <option value="13">Photography</option>
                         <option value="1">Pottery</option>
                         <option value="11">Printmaking</option>
                         <option value="8">Sculpture</option>

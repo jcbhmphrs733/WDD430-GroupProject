@@ -6,6 +6,18 @@ import { Button } from '@/components/ui/Button';
 
 export function SignupForm() {
   const [username, setUsername] = useState('');
+  const [profileImageUrl, setProfileImageUrl] = useState('/images/user-profile-pics/username.jpg');
+
+  // Update profile image URL when username changes
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newUsername = e.target.value;
+    setUsername(newUsername);
+    if (newUsername.trim()) {
+      setProfileImageUrl(`/images/user-profile-pics/${newUsername}.jpg`);
+    } else {
+      setProfileImageUrl('/images/user-profile-pics/username.jpg');
+    }
+  };
 
   return (
     <form action={signup} className="space-y-4">
@@ -34,7 +46,7 @@ export function SignupForm() {
           placeholder="Username" 
           required 
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={handleUsernameChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
         />
       </div>
@@ -103,12 +115,14 @@ export function SignupForm() {
           id="profile_image_url"
           name="profile_image_url" 
           type="text"
+          value={profileImageUrl}
+          onChange={(e) => setProfileImageUrl(e.target.value)}
           placeholder={username ? `/images/user-profile-pics/${username}.jpg` : '/images/user-profile-pics/your-username.jpg'}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
         />
         <div className="text-xs text-gray-500 mt-2">
           <p>Enter the path to your profile image file.</p>
-          <p className="font-medium">Leave empty to use default image. Format: <code className="bg-gray-100 px-1 rounded">/images/user-profile-pics/{username || 'your-username'}.jpg</code></p>
+          <p className="font-medium">Default image will be used if left unchanged. Format: <code className="bg-gray-100 px-1 rounded">/images/user-profile-pics/{username || 'your-username'}.jpg</code></p>
         </div>
       </div>
       

@@ -129,13 +129,13 @@ export default async function EditProfilePage({ params, searchParams }: EditProf
                   type="text"
                   id="profile_image_url"
                   name="profile_image_url"
-                  defaultValue={user.profile_image_url || ''}
+                  defaultValue={user.profile_image_url || `/images/user-profile-pics/${user.username}.jpg`}
                   className="w-full px-3 py-2 border border-background-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                   placeholder={`/images/user-profile-pics/${user.username}.jpg`}
                 />
                 <div className="text-xs text-gray-500 mt-2">
                   <p>Enter the path to your profile image file.</p>
-                  <p className="font-medium">Leave empty to use default image. Format: <code className="bg-gray-100 px-1 rounded">/images/user-profile-pics/{user.username}.jpg</code></p>
+                  <p className="font-medium">Default image path will be used if left unchanged. Format: <code className="bg-gray-100 px-1 rounded">/images/user-profile-pics/{user.username}.jpg</code></p>
                 </div>
               </div>
               

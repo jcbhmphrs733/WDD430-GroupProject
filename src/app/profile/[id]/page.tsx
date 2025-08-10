@@ -5,6 +5,7 @@ import { getUserAvatarColor } from '@/lib/utils';
 import { ArtpieceGrid } from '@/components/artpieces/ArtpieceGrid';
 import FallbackImage from '@/components/profile/fallbackimage';
 import { getCurrentUser } from '@/lib/session';
+import { DeleteAccountButton } from '@/components/profile/DeleteAccountButton';
 
 interface ProfilePageProps {
   params: Promise<{
@@ -207,7 +208,7 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
                   <>
                     <Link 
                       href={`/profile/${id}/edit`}
-                      className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center"
+                      className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800 transition-colors text-center flex items-center justify-center"
                     >
                       Edit Profile
                     </Link>
@@ -253,6 +254,20 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
               <p className="text-gray-600">
                 {fullName} hasn&apos;t created any artpieces yet.
               </p>
+            </div>
+          )}
+
+          {/* Delete Account Section - Only for own profile */}
+          {isOwnProfile && (
+            <div className="mt-12">
+              <DeleteAccountButton 
+                userId={id} 
+                userFullName={fullName}
+              />
+              
+                <p className="text-sm text-red-600 mb-3" style={{ marginTop: '20px' }}>
+                Once you delete your account, there is no going back. This will permanently delete your account, all your artpieces, reviews, and associated data.
+                </p>
             </div>
           )}
 
