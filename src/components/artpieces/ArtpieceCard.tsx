@@ -1,6 +1,6 @@
 // Artpiece card component for displaying individual artpieces
-import Image from 'next/image';
 import Link from 'next/link';
+import ArtpieceFallbackImage from './ArtpieceFallbackImage';
 import { ArtpieceWithDetails } from '@/types';
 
 interface ArtpieceCardProps {
@@ -16,7 +16,7 @@ export function ArtpieceCard({ artpiece, className = "" }: ArtpieceCardProps) {
     >
       {/* Full Image Background */}
       <div className="relative h-[250px] sm:h-[300px] lg:h-[320px] xl:h-[350px] w-full">
-        <Image
+        <ArtpieceFallbackImage
           src={artpiece.hero_image_url}
           alt={artpiece.title}
           fill

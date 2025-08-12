@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import ArtpieceFallbackImage from './ArtpieceFallbackImage';
 import { ArtpieceWithDetails, Creator } from '@/types';
 import { getUserAvatarColor } from '@/lib/utils';
 
@@ -18,7 +19,7 @@ export function SimpleMixedCard({ item, className = "" }: SimpleMixedCardProps) 
     return (
       <div className={`relative rounded-lg shadow-md overflow-hidden border border-background-300 ${className}`}>
         <div className="relative h-[180px] sm:h-[220px] lg:h-[240px] xl:h-[260px] w-full">
-          <Image
+          <ArtpieceFallbackImage
             src={artpiece.hero_image_url}
             alt={artpiece.title}
             fill

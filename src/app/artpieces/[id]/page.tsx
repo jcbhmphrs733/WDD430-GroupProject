@@ -7,6 +7,7 @@ import { getUserAvatarColor } from '@/lib/utils';
 import { ReviewSection } from '@/components/reviews/ReviewSection';
 import { FavoriteButton } from '@/components/artpieces/FavoriteButton';
 import { DeleteArtButton } from '@/components/artpieces/DeleteArtButton';
+import ArtpieceFallbackImage from '@/components/artpieces/ArtpieceFallbackImage';
 
 interface ArtpiecePageProps {
   params: Promise<{
@@ -80,7 +81,7 @@ export default async function ArtpiecePage({ params, searchParams }: ArtpiecePag
             {/* Hero Image Section */}
             <div className="order-1">
               <div className="relative aspect-square rounded-lg overflow-hidden shadow-lg border border-background-300">
-                <Image
+                <ArtpieceFallbackImage
                   src={artpiece.hero_image_url}
                   alt={artpiece.title}
                   fill
